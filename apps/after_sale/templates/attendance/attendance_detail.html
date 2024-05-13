@@ -1,0 +1,367 @@
+{% extends 'default/base_dashboard.html' %}
+{% block css %}
+{% load templatetag_category %}
+<link href="/static/dashboard/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- NORMAL Basic Table -->
+<div class="row clearfix">
+    <div class=" row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    Informações sobre o Atendimento {{object.pk}}
+                    <small></small>
+                </h2>
+                <ul class="header-dropdown m-r-0">
+                                <li>
+                                    <a href="{% url 'after_sale:attendance-update' object.pk %}" target="__blank__">
+                                        <i class="material-icons">edit</i>
+                                    </a>
+                                </li>
+                            </ul>
+            </div>
+            <div class="body">
+                <p>Data Criação: {{object.created}}</p>
+                {%if object.waiting_confirmation_date%}<p>Data de Solicitação: {{object.waiting_confirmation_date}}</p>{%endif%}
+                {%if object.confirmated_date%}<p>Data de Confirmação do profissional: {{object.confirmated_date}}</p>{%endif%}
+                {%if object.scheduling_date%}<p>Data Agendamento: {{object.scheduling_date}}</p>{%endif%}
+                {%if object.canceled_date%}<p>Data de Cancelamento: {{object.canceled_date}}</p>{%endif%}
+                {%if object.in_attendance_date%}<p>Data de Início do Atendimento: {{object.in_attendance_date}}</p>{%endif%}
+                {%if object.completed_date%}<p>Data de Fim do Atendimento: {{object.completed_date}}</p>{%endif%}
+                {%if object.expected_date_checkout%}<p>Data de Fim Estimado do Atendimento: {{object.expected_date_checkout}}</p>{%endif%}
+                <p>Duração Total Estimada: {{object.total_duration}} minutos</p>
+                <p>Endereço: {{object.address.address}}, {{object.address.number}}, {{object.address.complemento}}, CEP: {{object.address.postal_code}}, {{object.address.neighborhood}}  {{object.address.city}} - {{object.address.state}}</p>
+                <p>Status: {{object.status|translate_status}}</p>
+                <p>Servico Solicitado: {{object.initial_service.category}} - {{object.initial_service}}</p>
+                <p>Observação: {%if object.observation%}{{object.observation}}{%else%}Sem observacoes{%endif%}</p>
+            </div>
+        </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    Pagamento
+                    <small></small>
+                </h2>
+                <ul class="header-dropdown m-r-0">
+                                <li>
+                                    <a href="#" onclick="fallbackCopyTextToClipboard('http://www.biuri.com.br/{{object.pk}}/payment')">
+                                        <i class="material-icons">link</i>
+                                    </a>
+                                </li>
+                            </ul>
+            </div>
+            <div class="body">
+                <p>Cartão: {%if object.credit_card%}{{object.credit_card.iugu_payment_token.extra_info.brand}} {{object.credit_card.iugu_payment_token.extra_info.display_number}}{%else%}Nenhum cartão informado{%endif%}</p>
+                <p>Valor Total: R$ {{object.total_price}}
+                <p>Desconto Total: R$ {{object.total_discount}}
+                <p>Voucher: {%if object.voucher%}{{object.voucher.code}}{%else%}Nenhum voucher utilizado{%endif%}</p>
+            </div>
+        </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    Informações do Cliente
+                    <small></small>
+                </h2>
+            </div>
+            <div class="body">
+                <p>Nome: {{object.customer.user.get_full_name}}</p>
+                <p>Sexo: {{object.customer.gender}}</p>
+                <p>E-mail: {{object.customer.user.email}}</p>
+                <p>Telefone: {{object.customer.celphone}}</p>
+                <p>Aniversário: {{object.customer.birthday}}</p>
+            </div>
+        </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    Informações do Profissional
+                    <small></small>
+                </h2>
+            </div>
+            <div class="body">
+                <p>Nome: {{object.professional.user.get_full_name}}</p>
+                <p>Sexo: {{object.professional.gender}}</p>
+                <p>E-mail: {{object.professional.user.email}}</p>
+                <p>Telefone: {{object.professional.celphone}}</p>
+                <p>Aniversário: {{object.professional.birthday}}</p>
+            </div>
+        </div>
+                </div>
+            </div>
+        <div class="card">
+            <div class="header">
+                <!--<a type="button" class="btn btn-info waves-effect pull-right" href="/dashboard/professional/add">-->
+                    <!--<i class="material-icons">add</i>-->
+                    <!--<span>Adicionar</span>-->
+                <!--</a>-->
+                <!--<a type="button" class="btn btn-info waves-effect pull-right" data-toggle="modal" data-target="#defaultModal">-->
+                    <!--<i class="material-icons">filter_list</i>-->
+                    <!--<span>Filtros</span>-->
+                <!--</a>-->
+                <h2>
+                    Serviços do Atendimento
+                    <small></small>
+                </h2>
+            </div>
+            <div class="body table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Quantidade</th>
+                            <th>Serviço</th>
+                            <th>Preço</th>
+                            <th>Duração</th>
+                            <th>Criado durante o Atendimento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        {% for service in object.attendance_relation.all %}
+    <tr>
+        <th scope="row">{{service.quantity}}</th>
+        <th scope="row">{{service.service}}</th>
+        <th scope="row">R$ {{service.price|floatformat:2}}</th>
+        <th scope="row">{{service.duration}} minutos</th>
+        <th scope="row">{%if service.is_in_attendance %}Sim{%else%}Não{%endif%}</th>
+    </tr>
+        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</div>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    Pagamentos
+                    <small></small>
+                </h2>
+            </div>
+            <div class="body">
+                {% if object.payments.all %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                            <th>Código</th>
+                            <th>Comprovante</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                {%for payment in object.payments.all%}
+                     <tr>
+                         <th>{{payment.id}}</th>
+                         <th>R${{payment.amount}}</th>
+                         <th>{{payment.status|translate_payment_status}}</th>
+                         <th>{{payment.invoice_id}}</th>
+                         <th><a href="{{payment.information_data.url}}"  target="_blank">Link</a></th>
+
+                     </tr>
+                {%endfor%}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>Nenhum Pagamento Feito</p>
+                {% endif %}
+            </div>
+        </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    Transações
+                    <small></small>
+                </h2>
+            </div>
+            <div class="body">
+                {% if object.transaction_set.all %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Tipo</th>
+                            <th>Valor</th>
+                            <th>Recebido</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                {%for transaction in object.transaction_set.all%}
+                     <tr>
+                         <th>{{transaction.id}}</th>
+                         <th>{{transaction.type|translate_transaction_type}}</th>
+                         <th>R${{transaction.price}}</th>
+                         <th>{% if transaction.is_recebido %}Sim{% else %}Não{% endif %}</th>
+                         <th>{{transaction.created}}</th>
+                     </tr>
+                {%endfor%}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>Nenhuma Transação Feita</p>
+                {% endif %}
+                <p></p>
+            </div>
+        </div>
+        </div>
+            </div></div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    Avaliação feita pelo Profissional
+                    <small></small>
+                </h2>
+            </div>
+            <div class="body">
+                {%if object.has_evaluation%}
+                <p>Pontualidade: {{object.attendance_evaluation_customer.first.punctuality}} estrelas</p>
+                <p>Simpatia: {{object.attendance_evaluation_customer.first.cleaning}} estrelas</p>
+                <p>Clareza na solicitação: {{object.attendance_evaluation_customer.first.accuracy}} estrelas</p>
+                <p>Comentário: {{object.attendance_evaluation_customer.first.observation}}</p>
+                {%else%}
+                <p>Não Avaliado</p>
+                {%endif%}
+            </div>
+        </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    Avaliação feita pelo Cliente
+                    <small></small>
+                </h2>
+            </div>
+            <div class="body">
+                {%if object.has_evaluation_professional%}
+                {%for evaluation in object.evaluation_professional_attendance.all%}
+                    {% if not evaluation.description %}
+                     <p>{{evaluation.evaluation_type.description}}: {{evaluation.rating}} estrelas</p>
+                    {% endif %}
+                {%endfor%}
+                <p>Comentário: {{object.evaluation_comment}}</p>
+                {%else%}
+                <p>Não Avaliado</p>
+                {%endif%}
+            </div>
+        </div>
+        </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <!--<a type="button" class="btn btn-info waves-effect pull-right" href="/dashboard/professional/add">-->
+                    <!--<i class="material-icons">add</i>-->
+                    <!--<span>Adicionar</span>-->
+                <!--</a>-->
+                <!--<a type="button" class="btn btn-info waves-effect pull-right" data-toggle="modal" data-target="#defaultModal">-->
+                    <!--<i class="material-icons">filter_list</i>-->
+                    <!--<span>Filtros</span>-->
+                <!--</a>-->
+                <h2>
+                    Profissionais Exibidos na lista
+                    <small></small>
+                </h2>
+            </div>
+            <div class="body table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Profissional</th>
+                            <th>Tipo</th>
+                            <th>Data</th>
+                            <th>Posicao</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        {% for visualization in object.attendance_visualizations.all %}
+    <tr>
+        <th scope="row">{{visualization.professional.search_text}}</th>
+        <th scope="row">{{visualization.type}}</th>
+        <th scope="row">{{visualization.created}}</th>
+        <th scope="row">{{visualization.position}}</th>
+    </tr>
+        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+
+<!-- #END# NORMAL Basic Table -->
+            <div class="modal fade in" id="defaultModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="defaultModalLabel">Filtros</h4>
+                        </div>
+                        <form method="get">
+                        <div class="modal-body">
+                              Status: <input type="text" name="status"><br>
+                              Número Atendimento: <input type="text" name="id"><br>
+                              Texto(Número, documento ou celular): <input type="text" name="q"><br>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-link waves-effect">Filtrar</button>
+                        </div>
+                 </form>
+                    </div>
+                </div>
+            </div>
+
+{% endblock %}
+        {% block javascript %}
+        <script>
+            function fallbackCopyTextToClipboard(text) {
+              var textArea = document.createElement("textarea");
+              textArea.value = text;
+              document.body.appendChild(textArea);
+              textArea.focus();
+              textArea.select();
+
+              try {
+                var successful = document.execCommand('copy');
+                var msg = successful ? 'successful' : 'unsuccessful';
+                swal({
+                  type: 'success',
+                  title: 'Link Copiado',
+                  text: 'Link para pagamento copiado com sucesso',
+                  timer: 3000,
+                });
+              } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+              }
+
+              document.body.removeChild(textArea);
+            }
+        </script>
+<script src="/static/dashboard/plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="/static/dashboard/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="/static/dashboard/js/pages/tables/jquery-datatable.js"></script> {% endblock %}

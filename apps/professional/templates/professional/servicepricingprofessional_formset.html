@@ -1,0 +1,37 @@
+{% load template_tagcategory %}
+{%if formset.non_form_errors %}
+<p>{{ formset.non_form_errors }}</p>
+{%endif%}
+<table class="table">
+        {{ formset.management_form }}
+            {% for form in formset.forms %}
+                {{ form.management_form }}
+                <tr class="formset_row">
+                    <td style="display: none;">
+                        {{form.instance.pk }}
+                    </td>
+                    {% for hidden in form.hidden_fields %}
+                                    {{ hidden }}
+                    {% endfor %}
+                    <td>
+                    {{form.instance.service_professional.service.category.name}} - {{form.instance.service_professional.service.name}} - {{form.instance.service_professional.service.gender}} - {{form.instance.pricingcriterionoptions.description}}
+                    </td>
+                    <td>
+                    {{form.price}}
+                    </td>
+                    <td>
+                    {{form.average_time}}
+                    </td>
+                </tr>
+            {% endfor %}
+</table>
+<script type="text/javascript">
+    $('.formset_row').formset({
+        addText: 'adicionar',
+        deleteText: 'remover',
+    });
+    var divsToHide = document.getElementsByClassName("add-row");
+    for(var i = 0; i < divsToHide.length; i++){
+        divsToHide[i].style.display = "none"; // depending on what you're doing
+    };
+</script>

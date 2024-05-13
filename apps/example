@@ -1,0 +1,31 @@
+[
+  {
+    "TipoDocumento": {
+      "Tipo": "@Folha de Ponto",
+      "Tag": "Nome,Pis,Funcao,Matricula,",
+      "Qtd": 4
+    },
+    "Nome": "ADILSON",
+    "Pis": "21217470052",
+    "Funcao": "ADILSON",
+    "Matricula": "470820",
+    "Admissao": "@@",
+    "Filiacao": "@@",
+    "DataNascimento": "@@"
+  "CamposEncontrados":[
+  {"nome": "Nome", "valor": "ADILSON"},
+  ],
+  "TagsEncontradas":[
+  {
+      "Tipo": "@Folha de Ponto",
+      "Tag": "Nome,Pis,Funcao,Matricula,",
+      "Qtd": 4
+    },
+    {
+      "Tipo": "@CNH",
+      "Tag": "Nome,",
+      "Qtd": 1
+    }
+  ]
+  }
+]

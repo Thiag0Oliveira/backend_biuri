@@ -1,0 +1,52 @@
+﻿html, .container-fluid, .row, .login-wrapper{height: 100%}
+.login-page {
+    background-color: #F3F3F3;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    padding-left: 0;
+    height: 100%;
+    @media(min-width: 992px){
+        background-image: url('/static/theme/images/bg.png');
+    }
+    .login-wrapper{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .login-box {
+            max-width: 400px;
+            .title {
+                color: #FFBA33;
+                padding: 20px 15px;
+                text-align: center;
+                box-shadow: 1px 4px 9px 0px #dedede;;
+            }
+
+            a {
+                font-size: 14px;
+                text-decoration: none;
+                color: #00BCD4;
+            }
+
+            .logo {
+                a {
+                    font-size: 36px;
+                    display: block;
+                    width: 100%;
+                    text-align: center;
+                    color: #fff;
+                }
+
+                small {
+                    display: block;
+                    width: 100%;
+                    text-align: center;
+                    color: #fff;
+                    margin-top: -5px;
+                }
+
+                margin-bottom: 20px;
+            }
+        }
+    }
+}

@@ -1,0 +1,241 @@
+<meta name="csrf-token" content="{{ csrf_token }}">
+<div class="modal" id="service_modal" tabindex="-1" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="service_header">
+        <h4 class="modal-title text-center" id="service-modal-title">
+          Adicionar Serviço
+        </h4>
+      </div>
+      <div class="modal-body">
+          <div class="row text-center">
+          <div class="col-md-6">
+            <label>Serviço</label>
+            <select class="form-control"id="new_service_service"></select>
+          </div>
+            <div class="col-md-3">
+              <label>Preço</label>
+              <input class="form-control form-line" type="text" id="new_service_price" />
+            </div>
+            <div class="col-md-3">
+              <label>Duração</label>
+              <input class="form-control form-line" type="text" id="new_service_duration" />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+        <button type="button" id="new_service_save" class="btn btn-primary">Salvar</button>
+        </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="service_edit_modal" tabindex="-1" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="service_edit_header">
+        <h4 class="modal-title text-center" id="service-edit-modal-title">
+          Editar Serviço
+        </h4>
+      </div>
+      <div class="modal-body">
+          <div class="row text-center">
+          <div class="col-md-4">
+            <label></label>
+            <h5 id="service_edit_service"></h5>
+          </div>
+            <div class="col-md-4">
+              <label>Preço</label>
+              <input class="form-control" type="text" id="service_edit_price"/>
+            </div>
+            <div class="col-md-4">
+              <label>Duração</label>
+              <input class="form-control" type="text" id="service_edit_duration"/>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="service_edit_save" class="btn btn-primary">Salvar</button>
+          <button type="button" id="service_edit_delete" class="btn btn-danger"  >Deletar</button>
+        </div>
+    </div>
+  </div>
+</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Serviço</th>
+      <th>Preço</th>
+      <th>Duração</th>
+      <th>Editar</th>
+    </tr>
+  </thead>
+  <tbody id="service_tbody">
+  {% for service in services %}
+    <tr id="service{{service.id}}">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>
+        <button id="button{{service.id}}"class="btn btn-success waves-effect" type="submit" value="Delete">
+            Editar
+         </button>
+      </td>
+    </tr>
+
+  {% endfor %}
+  </tbody>
+
+</table>
+<div class="form-group">
+  <button type="button" id="service_add" class="btn btn-default">Adicionar</button>
+</div>
+<script>
+var table = "";
+
+jQuery(document).ready(function(){
+  $('.select2').select2();
+});
+
+var service_add_button = document.getElementById("service_add");
+service_add_button.addEventListener('click', function() {
+  $.ajax({
+    beforeSend: function(xhr){
+      xhr.setRequestHeader('X-CSRFToken', $('meta[name="csrf-token"]').attr('content'));
+    },
+    url: 'ajax/get_services/',
+    type: 'GET',
+    success: function(data){
+      $("#new_service_service").empty();
+      $("#new_service_service").append("<option value=''>---------</option>");
+      for(var i = 0; i<data.services.length; i++){
+          var id = data.services[i].id;
+          var name = data.services[i].name;
+          $("#new_service_service").append("<option value='"+id+"'>"+name+"</option>");
+      }
+      $("#new_service_service").selectpicker('refresh')
+    }
+    });
+  $("#service_modal").modal({
+              visible: true,
+            });
+});
+var new_service_button = document.getElementById("new_service_save");
+new_service_button.addEventListener('click', function() {
+
+  $.ajax({
+    beforeSend: function(xhr){
+      xhr.setRequestHeader('X-CSRFToken', $('meta[name="csrf-token"]').attr('content'));
+    },
+    url: 'ajax/create_attendance_service/',
+    type: 'POST',
+    data: {
+            'attendance_id': {{form.instance.pk}},
+            'service_id': $("#new_service_service").val(),
+            'price': $("#new_service_price").val(),
+            'duration': $("#new_service_duration").val()
+           },
+    success: function(){
+      $("#new_service").hide();
+      $("#new_service_service").empty();
+      $("#new_service_price").val("");
+      $("#new_service_duration").val("");
+      $("#service_modal").modal('toggle');
+      refresh_services();
+    }
+  });
+});
+
+$(document).ready(function() {
+    refresh_services();
+
+});
+
+var service_edit_delete = document.getElementById("service_edit_delete");
+service_edit_delete.addEventListener('click', function() {
+  var service_pk = service_edit_save.value;
+  $.ajax({
+    beforeSend: function(xhr){
+      xhr.setRequestHeader('X-CSRFToken', $('meta[name="csrf-token"]').attr('content'));
+    },
+    url: 'ajax/attendance_service_delete/',
+    type: 'POST',
+    data: {'pk': service_pk},
+    success: function(){
+      $("#service_edit_modal").modal('toggle');
+      refresh_services();
+    }
+  });
+});
+
+var service_edit_save = document.getElementById("service_edit_save");
+service_edit_save.addEventListener('click', function() {
+  var service_pk = service_edit_save.value;
+  var service_price = $("#service_edit_price").val();
+  var service_duration = $("#service_edit_duration").val();
+  $.ajax({
+    beforeSend: function(xhr){
+      xhr.setRequestHeader('X-CSRFToken', $('meta[name="csrf-token"]').attr('content'));
+    },
+    url: 'ajax/attendance_service_edit/',
+    type: 'POST',
+    data: {'pk': service_pk, 'price': service_price, 'duration': service_duration},
+    success: function(){
+      $("#service_edit_modal").modal('toggle');
+      refresh_services();
+    }
+  });
+});
+</script>
+<script>
+  var refresh_services = function(){
+  $.ajax({
+    beforeSend: function(xhr){
+      xhr.setRequestHeader('X-CSRFToken', $('meta[name="csrf-token"]').attr('content'));
+    },
+    url: 'ajax/get_attendance_service/',
+    type: 'GET',
+    data: {'pk': {{form.instance.pk}} },
+    success: function(data){
+      table="";
+      var parent = document.getElementById("service_tbody");
+      parent.innerHTML = "";
+      for(i=0;i<data.attendance_services.length;i++){
+        table = '<td>' + data.attendance_services[i].service + '</td>'+
+                    '<td>' + data.attendance_services[i].price + '</td>'+
+                    '<td>' + data.attendance_services[i].duration + '</td>';
+        var newTable = document.createElement("tr");
+        newTable.setAttribute("id", "service" + data.attendance_services[i].id);
+        newTable.innerHTML = table.trim();
+        parent.appendChild(newTable);
+        var newElement = document.createElement("td");
+        var newButton = document.createElement("button");
+        newButton.name="button" + data.attendance_services[i].id;
+        newButton.className="btn btn-success waves-effect";
+        //newButton.value=data.attendance_services[i].id;
+        newButton.setAttribute("type", "button");
+        newButton.setAttribute("attendance", data.attendance_services[i].id);
+        newButton.setAttribute("service", data.attendance_services[i].service);
+        newButton.setAttribute("price", data.attendance_services[i].price);
+        newButton.setAttribute("duration", data.attendance_services[i].duration);
+        newButton.innerHTML="Editar";
+        newButton.onclick = function (){
+          $("#service_edit_service").html(this.getAttribute("service"));
+          $("#service_edit_price").val(this.getAttribute("price"));
+          $("#service_edit_duration").val(this.getAttribute("duration"));
+          $("#service_edit_save").val(this.getAttribute("attendance"));
+          $("#service_edit_delete").val(this.getAttribute("attendance"));
+          $("#service_edit_modal").modal({
+              visible: true,
+            });
+        };
+        newElement.appendChild(newButton);
+        var trparent = document.getElementById("service" + data.attendance_services[i].id);
+        trparent.appendChild(newElement);
+      }
+      var discount_element = document.getElementById("id_total_discount");
+      var discount = discount_element.value;
+      update_price(discount);
+    }
+  });
+};
+</script>

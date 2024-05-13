@@ -1,0 +1,118 @@
+{% extends 'default/base_dashboard.html' %}
+{% block css %}
+{% load templatetag_category %}
+<link href="/static/dashboard/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- NORMAL Basic Table -->
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <a type="button" class="btn btn-info waves-effect pull-right" href="/lead/add">
+                    <i class="material-icons">add</i>
+                    <span>Adicionar</span>
+                </a>
+                <a type="button" class="btn btn-info waves-effect pull-right" data-toggle="modal" data-target="#defaultModal">
+                    <i class="material-icons">filter_list</i>
+                    <span>Filtros</span>
+                </a>
+                <h2>
+                    Leads
+                    <small></small>
+                </h2>
+            </div>
+            <div class="body table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th><a href="?{% url_replace request 'order_by' 'name' '-' %}">Name{% arrow_order request 'order_by' 'name' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'cpf' '-' %}">CPF{% arrow_order request 'order_by' 'cpf' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'telephone' '-' %}">Telefone{% arrow_order request 'order_by' 'telephone' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'category' '-' %}">Categoria{% arrow_order request 'order_by' 'category' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'status' '-' %}">Status{% arrow_order request 'order_by' 'status' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'created' '-' %}">Data{% arrow_order request 'order_by' 'created' %}</a></th>
+                            <th>Observação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        {% for object in object_list %}
+    <tr>
+        <th scope="row"><a href="{% url 'lead:profissional_lead_update' object.pk %}">{{object.name}}</a></th>
+        <th scope="row">{{object.cpf}}</th>
+        <th scope="row">{{object.telephone}}</th>
+        <th scope="row">{% for category in object.category.all %}{{category}}<br>{% endfor %}</th>
+        <th scope="row">{{object.status}}</th>
+        <th scope="row">{{object.created}}</th>
+        <th scope="row">{{object.obs}}</th>
+    </tr>
+        {% endfor %}
+                    </tbody>
+                </table>
+          <nav aria-label="...">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Anterior</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" tabindex="-1">Anterior</a>
+    </li>
+    {%endif%}
+    {% for i in paginator.page_range %}
+    {% if page_obj.number == i %}
+      <li class="page-item active"><a class="page-link">{{ i }}</a></li>
+    {% else %}
+      <li class="page-item"><a class="page-link" href="?{% url_replace request 'page'  i|stringformat:"i" '' %}">{{ i }}</a></li>
+    {% endif %}
+    {%endfor%}
+    {% if page_obj.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}">Próximo</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#">Próximo</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+            </div>
+        </div>
+</div>
+
+<!-- #END# NORMAL Basic Table -->
+            <div class="modal fade in" id="defaultModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="defaultModalLabel">Filtros</h4>
+                        </div>
+                        <form method="get">
+                        <div class="modal-body">
+                              Status: <input type="text" name="status"><br>
+                              Número Atendimento: <input type="text" name="id"><br>
+                              Texto(Número, documento ou celular): <input type="text" name="q"><br>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-link waves-effect">Filtrar</button>
+                        </div>
+                 </form>
+                    </div>
+                </div>
+            </div>
+
+{% endblock %} {% block javascript %}
+    <script>
+        (function ($, window) {
+
+    new TableExport($('table'), {formats: ['xls', 'csv'], fileName: "biuri-relatorio", bootstrap: true})
+
+}).call(this, jQuery, window);
+    </script>
+<script src="/static/dashboard/plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="/static/dashboard/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="/static/dashboard/js/pages/tables/jquery-datatable.js"></script> {% endblock %}

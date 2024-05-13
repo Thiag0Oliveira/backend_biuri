@@ -1,0 +1,136 @@
+// Styling for the masthead
+header.masthead {
+    position: relative;
+    width: 100%;
+    padding-top: 150px;
+    padding-bottom: 100px;
+    @media (max-width: 991px){
+        padding-top: 75px;
+        padding-bottom: 10px;
+    }
+    .header-content {
+        max-width: 500px;
+        margin-bottom: 100px;
+        @media (max-width: 425px){
+            text-align: left;
+        }
+        @media (max-width: 991px){
+            margin-bottom: 10px;
+            max-width: 100%;
+        }
+
+        text-align: center;
+        
+        h1, h2{font-weight: 300;color: white;}
+        h1 {
+            font-size: 30px;
+            line-height: 49px;
+            margin-bottom: 1rem;
+        }
+        h2 {
+            font-size: 24px;
+            line-height: 33px;
+        }
+        @media (max-width: 425px){
+            h1{
+                max-width: 80%;
+            }
+            h2{
+                font-size: 18px;
+                line-height: 22px;
+            }
+        }
+    }
+    @media (min-width: 992px) {
+        height: 520px;
+        padding-top: 150px;
+        padding-bottom: 0;
+        .header-content {
+            margin-bottom: 0;
+
+            text-align: left;
+            h1 {
+                font-size: 36px;
+            }
+        }
+    }
+    @include placeholder {color: $purple-form};
+    .form-control{
+        border: none;
+        font-size: 13.5px;
+        font-weight: 300;
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        padding-left: 0;
+        border-bottom: 2px solid $purple-form;
+        border-radius: 0px;
+        color: $purple-form;
+    }
+    .select2{
+        width: 100% !important;
+    }
+    .select2-container--default .select2-selection{
+        border: none;
+        width: 100%;
+        border-bottom: 2px $purple-form solid;
+        border-radius: 0px;
+        .select2-selection__rendered{
+            padding: 0;
+            margin: 0;
+            input{
+                margin: 0;
+                font-size: 13.5px;
+                font-weight: 300;
+            }
+        }
+    }
+    .form-signup{
+        background-image: url("/static/img/biuri-background-form.png");
+        .card{
+            margin-top: -4rem;
+            @media (max-width: 991px){
+                margin-top: 1rem;
+            }
+            .card-block{
+                padding-bottom: .2rem;
+            }
+        }
+    }
+    .image-header{
+        height: 100%;
+    }
+    select.form-control{
+        text-indent: 3px;
+    }
+    .termos{
+        font-size: 8px;
+    }
+    
+}
+
+body.executivo{
+    header.masthead{
+        background: $theme-secondary;
+        background: -moz-linear-gradient(-45deg, $theme-secondary 0%, $theme-tertiary 100%);
+        background: -webkit-gradient(left top, right bottom, color-stop(0%, $theme-secondary), color-stop(100%, $theme-tertiary));
+        background: -webkit-linear-gradient(-45deg, $theme-secondary 0%, $theme-tertiary 100%);
+        background: -o-linear-gradient(-45deg, $theme-secondary 0%, $theme-tertiary 100%);
+        background: -ms-linear-gradient(-45deg, $theme-secondary 0%, $theme-tertiary 100%);
+        background: linear-gradient(135deg, $theme-secondary 0%, $theme-tertiary 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$theme-secondary, endColorstr=$theme-tertiary, GradientType=1 );
+    }
+}
+
+body.profissional{
+    header.masthead{
+        background: $yellow-header;
+        background: -moz-linear-gradient(-45deg, $yellow-header 0%, $pink-header 100%);
+        background: -webkit-gradient(left top, right bottom, color-stop(0%, $yellow-header), color-stop(100%, $pink-header));
+        background: -webkit-linear-gradient(-45deg, $yellow-header 0%, $pink-header 100%);
+        background: -o-linear-gradient(-45deg, $yellow-header 0%, $pink-header 100%);
+        background: -ms-linear-gradient(-45deg, $yellow-header 0%, $pink-header 100%);
+        background: linear-gradient(135deg, $yellow-header 0%, $pink-header 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$yellow-header, endColorstr=$pink-header, GradientType=1 );
+    }
+}

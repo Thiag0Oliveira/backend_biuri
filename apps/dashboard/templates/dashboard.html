@@ -1,0 +1,401 @@
+{% extends 'default/base_dashboard.html' %}
+{% load humanize %}
+{% load templatetag_category %}
+{% block css %}
+<link href="/static/dashboard/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
+{% endblock %} 
+
+{% block content %}
+            <!-- Widgets -->
+            <div class="row clearfix">
+                {%if not is_professional%}
+                <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                    <div class="info-box bg-pink hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">work_outline</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">BASE DE PROFISSIONAIS</div>
+                            <div class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20">{{professional.all}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                    <div class="info-box bg-green hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">work</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">PROFISSIONAIS ATIVOS</div>
+                            <div class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20">{{professional_enabled.all}}</div>
+                        </div>
+                    </div>
+                </div>
+                {%endif%}
+                <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                    <div class="info-box bg-cyan hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">face</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">CLIENTES</div>
+                            <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">{{customer.all}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                    <div class="info-box bg-light-green hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">event</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">ATENDIMENTOS</div>
+                            <div class="number count-to" data-from="0" data-to="243" data-speed="1000" data-fresh-interval="20">{{attendance.all}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                    <div class="info-box bg-orange hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">star</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">AVALIAÇÕES</div>
+                            <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20">{{evaluation.all}}</div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">-->
+                    <!--<div class="info-box bg-blue-grey hover-expand-effect">-->
+                        <!--<div class="icon">-->
+                            <!--<i class="material-icons">record_voice_over</i>-->
+                        <!--</div>-->
+                        <!--<div class="content">-->
+                            <!--<div class="text">EXECUTIVOS</div>-->
+                            <!--<div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20">{{executive.all}}</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+            <!-- #END# Widgets -->
+            <!-- CPU Usage -->
+            <!--<div class="row clearfix">-->
+                <!--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">-->
+                    <!--<div class="card">-->
+                        <!--<div class="header">-->
+                            <!--<div class="row clearfix">-->
+                                <!--<div class="col-xs-12 col-sm-6">-->
+                                    <!--<h2>CPU USAGE (%)</h2>-->
+                                <!--</div>-->
+                                <!--<div class="col-xs-12 col-sm-6 align-right">-->
+                                    <!--<div class="switch panel-switch-btn">-->
+                                        <!--<span class="m-r-10 font-12">REAL TIME</span>-->
+                                        <!--<label>OFF<input type="checkbox" id="realtime" checked><span class="lever switch-col-cyan"></span>ON</label>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<ul class="header-dropdown m-r&#45;&#45;5">-->
+                                <!--<li class="dropdown">-->
+                                    <!--<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">-->
+                                        <!--<i class="material-icons">more_vert</i>-->
+                                    <!--</a>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                        <!--<div class="body">-->
+                            <!--<div id="real_time_chart" class="dashboard-flot-chart"></div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!-- #END# CPU Usage -->
+            <div class="row clearfix">
+                <!-- Visitors -->
+                {%if not is_professional%}
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="card">
+                        <div class="body bg-pink">
+                            <div class="font-bold m-b--35"></div>
+                            <ul class="dashboard-stat-list">
+                                <li>
+                                    HOJE
+                                    <span class="pull-right"><b>{{professional.today}}</b></span>
+                                </li>
+                                <li>
+                                    ONTEM
+                                    <span class="pull-right"><b>{{professional.yesterday}}</b></span>
+                                </li>
+                                <li>
+                                    ÚLTIMOS 7 DIAS
+                                    <span class="pull-right"><b>{{professional.last_week}}</b></span>
+                                </li>
+                                <li>
+                                    ÚLTIMOS 30 DIAS
+                                    <span class="pull-right"><b>{{professional.last_month}}</b></span>
+                                </li>
+                                <li>
+                                    ÚLTIMOS 12 MESES
+                                    <span class="pull-right"><b>{{professional.last_year}}</b></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="card">
+                        <div class="body bg-green">
+                            <div class="font-bold m-b--35"></div>
+                            <ul class="dashboard-stat-list">
+                                <li>
+                                    HOJE
+                                    <span class="pull-right"><b>{{professional_enabled.today}}</b></span>
+                                </li>
+                                <li>
+                                    ONTEM
+                                    <span class="pull-right"><b>{{professional_enabled.yesterday}}</b></span>
+                                </li>
+                                <li>
+                                    ÚLTIMOS 7 DIAS
+                                    <span class="pull-right"><b>{{professional_enabled.last_week}}</b></span>
+                                </li>
+                                <li>
+                                    ÚLTIMOS 30 DIAS
+                                    <span class="pull-right"><b>{{professional_enabled.last_month}}</b></span>
+                                </li>
+                                <li>
+                                    ÚLTIMOS 12 MESES
+                                    <span class="pull-right"><b>{{professional_enabled.last_year}}</b></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {%endif%}
+                <!-- #END# Visitors -->
+                <!-- Latest Social Trends -->
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="card">
+                        <div class="body bg-cyan">
+                            <div class="font-bold m-b--35"></div>
+                            <ul class="dashboard-stat-list">
+                                <li>
+                                    HOJE
+                                    <span class="pull-right"><b>{{customer.today}}</b></span>
+                                </li>
+                                <li>
+                                    ONTEM
+                                    <span class="pull-right"><b>{{customer.yesterday}}</b></span>
+                                </li>
+                                <li>
+                                    ÚLTIMOS 7 DIAS
+                                    <span class="pull-right"><b>{{customer.last_week}}</b></span>
+                                </li>
+                                <li>
+                                    ÚLTIMOS 30 DIAS
+                                    <span class="pull-right"><b>{{customer.last_month}}</b></span>
+                                </li>
+                                <li>
+                                    ÚLTIMOS 12 MESES
+                                    <span class="pull-right"><b>{{customer.last_year}}</b></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- #END# Latest Social Trends -->
+                <!-- Answered Tickets -->
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="card">
+                        <div class="body bg-light-green">
+                            <div class="font-bold m-b--35"></div>
+                            <ul class="dashboard-stat-list">
+                                <li>
+                                    HOJE
+                                    <span class="pull-right"><b>{{attendance.today}}</b></span>
+                                </li>
+                                <li>
+                                    ONTEM
+                                    <span class="pull-right"><b>{{attendance.yesterday}}</b></span>
+                                </li>
+                                <li>
+                                    ÚLTIMOS 7 DIAS
+                                    <span class="pull-right"><b>{{attendance.last_week}}</b></span>
+                                </li>
+                                <li>
+                                    ÚLTIMOS 30 DIAS
+                                    <span class="pull-right"><b>{{attendance.last_month}}</b></span>
+                                </li>
+                                <li>
+                                    ÚLTIMOS 12 MESES
+                                    <span class="pull-right"><b>{{attendance.last_year}}</b></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- #END# Answered Tickets -->
+                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                    <div class="card">
+                        <div class="body bg-orange">
+                            <div class="font-bold m-b--35"></div>
+                            <ul class="dashboard-stat-list">
+                                <li>
+                                    HOJE
+                                    <span class="pull-right"><b>{{evaluation.today}}</b></span>
+                                </li>
+                                <li>
+                                    ONTEM
+                                    <span class="pull-right"><b>{{evaluation.yesterday}}</b></span>
+                                </li>
+                                <li>
+                                    ÚLTIMOS 7 DIAS
+                                    <span class="pull-right"><b>{{evaluation.last_week}}</b></span>
+                                </li>
+                                <li>
+                                    ÚLTIMOS 30 DIAS
+                                    <span class="pull-right"><b>{{evaluation.last_month}}</b></span>
+                                </li>
+                                <li>
+                                    ÚLTIMOS 12 MESES
+                                    <span class="pull-right"><b>{{evaluation.last_year}}</b></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">-->
+                    <!--<div class="card">-->
+                        <!--<div class="body bg-blue-grey">-->
+                            <!--<div class="font-bold m-b&#45;&#45;35"></div>-->
+                            <!--<ul class="dashboard-stat-list">-->
+                                <!--<li>-->
+                                    <!--HOJE-->
+                                    <!--<span class="pull-right"><b>{{executive.today}}</b></span>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--ONTEM-->
+                                    <!--<span class="pull-right"><b>{{executive.yesterday}}</b></span>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--ÚLTIMOS 7 DIAS-->
+                                    <!--<span class="pull-right"><b>{{executive.last_week}}</b></span>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--ÚLTIMOS 30 DIAS-->
+                                    <!--<span class="pull-right"><b>{{executive.last_month}}</b></span>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--ÚLTIMOS 12 MESES-->
+                                    <!--<span class="pull-right"><b>{{executive.last_year}}</b></span>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+            <div class="row clearfix">
+                <!-- Task Info -->
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <div class="card">
+                        <div class="header">
+                            <h2>ÚLTIMOS ATENDIMENTOS</h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table class="table table-hover dashboard-task-infos">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Serviço</th>
+                                            <th>Data</th>
+                                            <th>Status</th>
+                                            <th>Progresso</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for attendance in attendance_ranking%}
+                                        <tr>
+                                            <td>{{attendance.pk}}</td>
+                                            <td>{{attendance.initial_service}}</td>
+                                            <td>{{attendance.modified|naturaltime}}</td>
+                                            <td>{{attendance.status|translate_status}}</td>
+                                            <td>{{attendance.total_price}}</td>
+                                        </tr>
+                                    {%endfor%}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- #END# Task Info -->
+                <!-- Browser Usage -->
+                <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                    <div class="card">
+                        <div class="header">
+                            <h2>STATUS ATENDIMENTOS</h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                           <div class="table-responsive">
+                                <table class="table table-hover dashboard-task-infos">
+                                    <thead>
+                                        <tr>
+                                            <th>STATUS</th>
+                                            <th>HOJE</th>
+                                            <th>ONTEM</th>
+                                            <th>ÚLTIMOS 7 DIAS</th>
+                                            <th>ÚLTIMOS 30 DIAS</th>
+                                            <th>ÚLTIMOS 12 MESES</th>
+                                            <th>TOTAL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {%for status in status_attendance%}
+                                        <tr>
+                                            <td>{{status.name|translate_status}}</td>
+                                            <td>{{status.metrics.today}}</td>
+                                            <td>{{status.metrics.yesterday}}</td>
+                                            <td>{{status.metrics.last_week}}</td>
+                                            <td>{{status.metrics.last_month}}</td>
+                                            <td>{{status.metrics.last_year}}</td>
+                                            <td>{{status.metrics.all}}</td>
+                                        </tr>
+                                    {%endfor%}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- #END# Browser Usage -->
+            </div>
+
+
+
+{% endblock %} {% block javascript %}
+<script src="/static/dashboard/plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="/static/dashboard/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="/static/dashboard/plugins/chartjs/Chart.bundle.js"></script>
+<script src="/static/dashboard/js/pages/tables/jquery-datatable.js"></script>
+<script src="/static/dashboard/plugins/flot-charts/jquery.flot.js"></script>
+<script src="/static/dashboard/plugins/flot-charts/jquery.flot.resize.js"></script>
+<script src="/static/dashboard/plugins/flot-charts/jquery.flot.pie.js"></script>
+<script src="/static/dashboard/plugins/flot-charts/jquery.flot.categories.js"></script>
+<script src="/static/dashboard/plugins/flot-charts/jquery.flot.time.js"></script>
+<script src="/static/dashboard/plugins/jquery-sparkline/jquery.sparkline.js"></script>
+
+{% endblock %}

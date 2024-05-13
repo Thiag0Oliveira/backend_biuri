@@ -1,0 +1,140 @@
+{% extends 'default/base_dashboard.html' %}
+{% block css %}
+{% load templatetag_category %}
+<link href="/static/dashboard/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- NORMAL Basic Table -->
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <a type="button" class="btn btn-info waves-effect pull-right" data-toggle="modal" data-target="#defaultModal">
+                    <i class="material-icons">filter_list</i>
+                    <span>Filtros</span>
+                </a>
+                <h2>
+                    Transações
+                    <small></small>
+                </h2>
+            </div>
+            <div class="body table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th><a href="?{% url_replace request 'order_by' 'id' '-' %}">ID da Transação{% arrow_order request 'order_by' 'id' %}</a></th>
+                            <!--<th>Cliente</th>-->
+                            <th><a href="?{% url_replace request 'order_by' 'attendance__id' '-' %}">Atendimento{% arrow_order request 'order_by' 'attendance__id' %}</a></th>
+                            <!--<th>Profissional</th>-->
+                            <th><a href="?{% url_replace request 'order_by' 'attendance__professional__user__first_name' '-' %}">Profissional{% arrow_order request 'order_by' 'attendance__professional__user__first_name' %}</a></th>
+                            <!--<th>Serviço</th>-->
+                            <th>Tipo</th>
+                            <th>Valor</th>
+                            <!--<th>Data Atendimento</th>-->
+                            <!--<th>Status</th>-->
+                            <th><a href="?{% url_replace request 'order_by' 'is_recebido' '-' %}">Status{% arrow_order request 'order_by' 'is_recebido' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'created' '-' %}">Data{% arrow_order request 'order_by' 'created' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'attendance__voucher__id' '-' %}">Voucher{% arrow_order request 'order_by' 'attendance__voucher__id' %}</a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        {% for object in object_list %}
+    <tr>
+        <th scope="row">{{object.id}}</th>
+        <th scope="row">
+            {% if object.attendance.id %}
+            <a href="{% url 'after_sale:attendance-detail' object.attendance.id %}" target="_blank">
+            Atendimento {{object.attendance.id}}
+            </a>
+            {%else%}-
+            {%endif%}
+        </th>
+        <th scope="row">{% if object.attendance.id %}<a href="{% url 'professional:professional-update' object.attendance.professional.id %}" target="_blank">
+            {{object.attendance.professional.user.get_full_name}}</a>{%else%}{% if object.transfer.id %}{{object.transfer.professional.user.get_full_name}}{%else%}-{%endif%}{%endif%}</th>
+        <th scope="row">{{object.type}}</th>
+        <th scope="row">R$ {{object.price}}</th>
+        <th scope="row">{%if object.is_recebido%}Recebido{%else%}Não Recebido{%endif%}</th>
+        <th scope="row">{{object.created|date:"d/m/Y H:i"}}</th>
+        <th scope="row">{% if object.attendance.voucher %}{{object.attendance.voucher.code}}
+            {% else %}Sem Voucher{% endif %}</th>
+    </tr>
+        {% endfor %}
+                    </tbody>
+                </table>
+          <nav aria-label="...">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Anterior</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" tabindex="-1">Anterior</a>
+    </li>
+    {%endif%}
+    {% for i in paginator.page_range %}
+    {% if page_obj.number == i %}
+      <li class="page-item active"><a class="page-link">{{ i }}</a></li>
+    {% else %}
+      <li class="page-item"><a class="page-link" href="?{% url_replace request 'page'  i|stringformat:"i" '' %}">{{ i }}</a></li>
+    {% endif %}
+    {%endfor%}
+    {% if page_obj.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}">Próximo</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#">Próximo</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+            </div>
+        </div>
+</div>
+
+<!-- #END# NORMAL Basic Table -->
+            <div class="modal fade in" id="defaultModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="defaultModalLabel">Filtros</h4>
+                        </div>
+                        <form method="get">
+                        <div class="modal-body">
+                              Data Inicio: <input type="date" name="initial_date"><br>
+                              Data Fim: <input type="date" name="final_date"><br>
+                              Tipo: <select name="types" class="custom-select" multiple>
+                                      <option value="executive">executive</option>
+                                      <option value="discount">discount</option>
+                                      <option value="professional">professional</option>
+                                    </select><br>
+                              Status: <select name="is_recebido" class="custom-select">
+                                      <option value="">-</option>
+                                      <option value="True">Recebido</option>
+                                      <option value="False">Não Recebido</option>
+                                    </select>
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-link waves-effect">Filtrar</button>
+                        </div>
+                 </form>
+                    </div>
+                </div>
+            </div>
+
+{% endblock %} {% block javascript %}
+<script src="/static/dashboard/plugins/jquery-datatable/jquery.dataTables.js"></script>
+    <script>
+        (function ($, window) {
+
+    new TableExport($('table'), {formats: ['xls', 'csv'], fileName: "biuri-relatorio", bootstrap: true})
+
+}).call(this, jQuery, window);
+    </script>
+<script src="/static/dashboard/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="/static/dashboard/js/pages/tables/jquery-datatable.js"></script> {% endblock %}

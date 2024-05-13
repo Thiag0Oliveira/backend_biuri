@@ -1,0 +1,122 @@
+{% extends 'default/base_dashboard.html' %}
+{% block css %}
+
+{% endblock %}
+{% block content %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.js"></script>
+<!-- Vertical Layout | With Floating Label -->
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    Cadastro/Edição de Cupom
+                    <small>Informações Iniciais</small>
+                </h2>
+                <ul class="header-dropdown m-r--5">
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">more_vert</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="body">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h2 class="card-inside-title">Informações do Cupom</h2>
+
+                    <div class="form-group form-float">
+                        <label class="form-label">{{form.code.label}}</label>
+                        <div class="form-line">
+                            {{ form.code }}
+                        </div>
+                         {{ form.code.errors }}
+                    </div>
+                    <div class="form-group form-float">
+                        <label class="form-label">{{form.initial_date.label}}</label>
+                        <div class="form-line">
+                            {{ form.initial_date }}
+                        </div>
+                         {{ form.initial_date.errors }}
+                    </div>
+                    <div class="form-group form-float">
+                        <label class="form-label">{{form.final_date.label}}</label>
+                        <div class="form-line">
+                            {{ form.final_date }}
+                        </div>
+                         {{ form.final_date.errors }}
+                    </div>
+                    <div class="form-group form-float">
+                        <label class="form-label">{{form.validation_type.label}}</label>
+                        <div class="form-line">
+                            {{ form.validation_type }}
+                        </div>
+                         {{ form.validation_type.errors }}
+                    </div>
+                    <div class="form-group form-float">
+                        <label class="form-label">{{form.discount_type.label}}</label>
+                        <div class="form-line">
+                            {{ form.discount_type }}
+                        </div>
+                         {{ form.discount_type.errors }}
+                    </div>
+                    <div class="form-group form-float">
+                        <label class="form-label">{{form.discount.label}}</label>
+                        <div class="form-line">
+                            {% if form.instance.pk %}
+                            {% if form.instance.discount_type == 'percent' %}
+                            {{ form.discount }}
+                            {% else %}
+                            {{ form.discount_value }}
+                            {% endif %}
+                            {% else %}
+                            {{ form.discount_value }}
+                            {% endif %}
+                        </div>
+                         {{ form.discount.errors }}
+                        {{ form.discount_value.errors }}
+                    </div>
+                    <!--<div class="form-group form-float">
+                        <label class="form-label">Desconto</label>
+                        <div class="form-line">
+                            <Input type="number" name="discount" value="0" required class="form-control no-resize" id="discount">
+                            </Input>
+                        </div>
+                    </div>-->
+                    <div class="form-group form-float">
+                        <label class="form-label">{{form.quantity.label}}</label>
+                        <div class="form-line">
+                            {{ form.quantity }}
+                        </div>
+                         {{ form.quantity.errors }}
+                    </div>
+                    <div class="form-group form-float">
+                        <label class="form-label">{{form.observation.label}}</label>
+                        <div class="form-line">
+                            {{ form.observation }}
+                        </div>
+                         {{ form.observation.errors }}
+                    </div>
+
+                    <button type="submit" value="draft" name="status" class="btn btn-primary">
+                        <span>
+                            Salvar
+                        </span>
+                    </button>
+                    <button type="submit" value="canceled" name="status" class="btn btn-danger">
+                        <span>
+                            Cancelar
+                        </span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Vertical Layout | With Floating Label -->
+{% endblock %}
+<script>
+</script>

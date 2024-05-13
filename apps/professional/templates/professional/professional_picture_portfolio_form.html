@@ -1,0 +1,191 @@
+{% extends 'default/base_dashboard.html' %}
+{% block css %}
+    <link href="/static/dashboard/plugins/dropzone/dropzone.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.js"></script>
+<script src="/static/dashboard/plugins/dropzone/dropzone.js"></script>
+<!-- Vertical Layout | With Floating Label -->
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    Cadastro/Edição Profissional
+                    <small>Portfolio</small>
+                </h2>
+                <ul class="header-dropdown m-r--5">
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">more_vert</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="body">
+                <form method="post" enctype="multipart/form-data" class="dropzone" id="MultiFileUpload">
+                    {% csrf_token %}
+                    <meta name="csrf-token" content="{{ csrf_token }}">
+                    <div class="fallback">
+                        <input id="file" name="file" type="file" multiple="multiple"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Vertical Layout | With Floating Label -->
+{% endblock %}
+{% block javascript %}
+<script>
+function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+Dropzone.options.MultiFileUpload= {
+    url: "{{request.path}}",
+    crossDomain: false,
+    paramName: "file",
+    parallelUploads: 20,
+    acceptedFiles: ".jpeg,.jpg,.png",
+    filesizeBase: 1024,
+    maxFilesize: 10000,
+    createImageThumbnails: true,
+    thumbnailHeight: 120,
+    thumbnailWidth: 120,
+    thumbnailMethod: 'contain',
+    init: function () {
+            var pkstr = "{{ request.path }}";
+            pkstr = pkstr.replace("/dashboard/professional/", "");
+            pkstr =  pkstr.replace("/picture_portfolio", "");
+            var pk = parseInt(pkstr);
+            var myDropzone = this;
+
+            this.on("uploadprogress", function (file, progress, bytesSent) {
+                progress = bytesSent / file.size * 100;
+                //console.log(filesizecalculation(bytesSent))
+            });
+            this.on("maxfilesexceeded", function (data) {
+                var res = eval('(' + data.xhr.responseText + ')');
+            });
+            this.on("addedfile", function (file) {
+                var removeButton = Dropzone.createElement("<button data-dz-remove " +
+                    "class='del_thumbnail btn btn-default'><span class='glyphicon glyphicon-trash'></span> Deletar</button>");
+                var _this = this;
+                file.previewElement.appendChild(removeButton);
+                removeButton.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                     $.ajax({
+                        beforeSend: function(xhr){
+                            xhr.setRequestHeader('X-CSRFToken', $('meta[name="csrf-token"]').attr('content'));
+                        },
+                        url: '/dashboard/ajax/delete_picture/',
+                        dataType: 'json',
+                        type: 'POST',
+                        data: { 'name' : file.name },
+                    });
+                    _this.removeFile(file);
+                });
+            });
+            this.on("error", function (file, message) {
+                this.removeFile(file);
+            });
+            this.on("removedfile", function(file){
+
+            });
+            this.on("success", function(file) {
+                this.removeFile(file);
+                $.ajax({
+                    url : '/dashboard/ajax/newest_picture/',
+                    dataType: 'json',
+                    type: 'GET',
+                    data: { 'pk' : pk },
+                    success: function(data) {
+                        var mockFile = {name: data.picture, size: data.size, type: 'image/jpeg' };
+                        myDropzone.addFile.call(myDropzone, mockFile);
+                        myDropzone.createThumbnailFromUrl(mockFile, data.url);
+                    },
+                });
+            });
+
+            {% for picture in pictures %}
+                var mockFile = {name: "{{picture.picture.name}}", size: {{picture.picture.size}}, type: 'image/jpeg' };
+                this.addFile.call(this, mockFile);
+                this.createThumbnailFromUrl(mockFile, "{{picture.picture.url}}");
+            {% endfor %}
+        },
+}
+</script>
+<script>
+</script>
+<!--<script>-->
+<!--    Dropzone.autoDiscover = false;-->
+<!--    Dropzone.options.MultiFileUpload={-->
+<!--        url: "{{request.path}}",-->
+<!--        crossDomain: false,-->
+<!--        paramName: "file",-->
+<!--        parallelUploads: 5,-->
+<!--        autoProcessQueue: true,-->
+<!--        filesizeBase: 1024,-->
+<!--        maxFilesize: 10000,-->
+<!--        dictRemoveFileConfirmation: null,-->
+<!--        init: function () {-->
+<!--            this.on("uploadprogress", function (file, progress, bytesSent) {-->
+<!--                progress = bytesSent / file.size * 100;-->
+<!--                console.log(filesizecalculation(bytesSent))-->
+<!--            });-->
+<!--            this.on("maxfilesexceeded", function (data) {-->
+<!--                var res = eval('(' + data.xhr.responseText + ')');-->
+<!--            });-->
+<!--            this.on("addedfile", function (file) {-->
+<!--                var removeButton = Dropzone.createElement("<button data-dz-remove " +-->
+<!--                    "class='del_thumbnail btn btn-default'><span class='glyphicon glyphicon-trash'></span> Sil</button>");-->
+<!--                var _this = this;-->
+<!--                removeButton.addEventListener("click", function (e) {-->
+<!--                    e.preventDefault();-->
+<!--                    e.stopPropagation();-->
+<!--                    _this.removeFile(file);-->
+<!--                });-->
+<!--                file.previewElement.appendChild(removeButton);-->
+<!--            });-->
+<!--            this.on("error", function (file, message) {-->
+
+<!--                console.log(message);-->
+<!--                this.removeFile(file);-->
+<!--            });-->
+<!--            this.on('sending', function (file, xhr, formData) {-->
+<!--                xhr.setRequestHeader("X-CSRFToken", csrftoken);-->
+<!--            });-->
+<!--        }-->
+<!--    };-->
+
+<!--    Dropzone.prototype.filesize = function (size) {-->
+<!--       filesizecalculation(size)-->
+<!--    };-->
+
+<!--    function filesizecalculation(size) {-->
+<!--        if (size < 1024 * 1024) {-->
+<!--            return "<strong>" + (Math.round(Math.round(size / 1024) * 10) / 10) + " KB</strong>";-->
+<!--        } else if (size < 1024 * 1024 * 1024) {-->
+<!--            return "<strong>" + (Math.round((size / 1024 / 1024) * 10) / 10) + " MB</strong>";-->
+<!--        } else if (size < 1024 * 1024 * 1024 * 1024) {-->
+<!--            return "<strong>" + (Math.round((size / 1024 / 1024 / 1024) * 10) / 10) + " GB</strong>";-->
+<!--        }-->
+<!--    }-->
+<!--</script>-->
+{% endblock %}

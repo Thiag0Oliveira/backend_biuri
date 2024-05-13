@@ -1,0 +1,19 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<form action="" method="post">
+    {% csrf_token %}
+    <p>Informações Gerais</p>
+    {{user_form.as_ul}}
+        <p>Informações do Profissional</p>
+        {{ form.as_p }}
+    <p>Address</p>
+        {% include 'core/address_form.html' with form=address_form%}
+    <p>Serviços</p>
+        {% include 'professional/serviceprofessional_formset.html' with formset=serviceprofessional%}
+    <p>Cidades</p>
+        {% include 'professional/citys_formset.html' with formset=cityprofessional%}
+        <input type="submit" />
+    </form>

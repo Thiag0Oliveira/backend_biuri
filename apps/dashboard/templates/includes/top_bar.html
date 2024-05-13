@@ -1,0 +1,66 @@
+
+<!-- Top Bar -->
+<nav class="navbar">
+        <div class="navbar-header">
+            <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+            <a href="javascript:void(0);" class="bars"></a>
+            
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse" style="display: flex  !important;">
+            <ul class="nav navbar-nav">
+                <!-- Call Search -->
+                <li>
+                    <a href="javascript:void(0);" class="search" data-close="true">
+                        <i class="material-icons">search</i>
+                        <input type="text" placeholder="Procurar" />
+                    </a>
+                </li>
+                <!-- #END# Call Search -->
+                
+                <li class="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        <img width="30" class="img-circle" src="{% if request.user.executive.first is not None %}{{request.user.executive.first.avatar.url}}{%else%}https://simpleisbetterthancomplex.com/img/picture.jpg{% endif %}" />
+                        <!--<img width="30" class="img-circle" src="{{ request.user.executive.avatar.image.url }}" />-->
+                        <span class="hidden-xs">{{request.user.first_name}}</span>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="#"><i class="material-icons">person</i>Perfil</a></li>
+                        <li role="seperator" class="divider"></li>
+                        <li><a href="{% url 'account_change_password' %}"><i class="material-icons">lock</i>Alterar Senha</a></li>
+                        <li role="seperator" class="divider"></li>
+                        <li><a href="{% url 'account_logout' %}"><i class="material-icons">input</i>Sair</a></li>
+                    </ul>
+                </li>
+                <!-- Notifications -->
+                <li>
+                    <a href="javascript:void(0);" class="js-search" data-close="true">
+                        <i class="material-icons">notifications_none</i>
+                    </a>
+                    <!--
+                    <ul class="dropdown-menu">
+                        <li class="header">NOTIFICATIONS</li>
+                        <li class="body">
+                            <ul class="menu">
+                                <li>
+                                    <a href="javascript:void(0);">
+                                        <div class="icon-circle bg-light-green">
+                                            <i class="material-icons">person_add</i>
+                                        </div>
+                                        <div class="menu-info">
+                                            <h4>12 new members joined</h4>
+                                            <p>
+                                                <i class="material-icons">access_time</i> 14 mins ago
+                                            </p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    -->
+                </li>
+                <!-- #END# Notifications -->
+            </ul>
+        </div>
+</nav>
+    <!-- #Top Bar -->

@@ -1,0 +1,39 @@
+// Styling for the features section
+section.features {
+    text-align: center;
+    @media (min-width: 768px) {
+        text-align: left;
+    }
+    iframe{
+        width: 100%;
+        min-height: 400px;
+        @media (min-width: 768px) {
+            min-height: 530px;
+        }
+    }
+    .feature-item {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        @media (max-width: 768px) {
+            padding-top: 0px;
+            padding-bottom: 0px;
+            &.xs-left{
+                text-align: left;
+            }
+            &.xs-right{
+                text-align: right;
+            }
+        }
+        .feature-title {
+            font-size: 20px;
+            color: $color-highlight;
+        }
+        .feature-description{
+            font-size: 18px;
+        }
+        img{
+            min-height: 55px;
+            margin-bottom: 10px;
+        }
+    }
+}

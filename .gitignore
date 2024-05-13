@@ -1,0 +1,11 @@
+**/__pycache__/**
+*.pyc
+static/dashboard/node_modules
+.DS_Store
+htmlcov/*
+.env/*
+apps/core/__pycache__/*
+biuri/__pycache__/*
+biuri/settings/__pycache__/**
+media/**
+venv

@@ -1,0 +1,210 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Biuri Dashboard</title>
+    <!-- Favicon-->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <!-- Bootstrap Core Css -->
+    <link href="/static/dashboard/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap Core Css -->
+    <link href="/static/dashboard/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet">
+    <!-- Waves Effect Css -->
+    <link href="/static/dashboard/plugins/node-waves/waves.css" rel="stylesheet" />
+    <!-- Animation Css -->
+    <link href="/static/dashboard/plugins/animate-css/animate.css" rel="stylesheet" />
+    <!-- Custom Css -->
+    <link href="/static/dashboard/css/styles.min.css" rel="stylesheet">
+    <!-- AdminBSB dashboards. You can choose a dashboard from css/dashboards instead of get all dashboards -->
+    <link href="/static/dashboard/css/themes.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/vendor/sweetalert2/dist/sweetalert2.min.css">
+    <!-- Bootstrap Material Datetime Picker Css -->
+    <link href="/static/dashboard/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+
+{% block css %} {% endblock %}
+</head>
+
+<body class="dashboard-purple ls-closed">
+    <script src="https://cdn.jsdelivr.net/g/filesaver.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/TableExport/5.1.0/js/tableexport.min.js"></script>
+    {% include 'includes/preloader.html' %}
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+
+    <!-- Left Sidebar -->
+    <aside id="leftsidebar" class="sidebar">
+        <!-- Menu -->
+        <div class="menu">
+            <ul class="list">
+                <li class="header">
+                    <img class="img-responsive" src="/static/img/logo.png" />
+                </li>
+                <li {% if request.path == '/dashboard/' %}class="active"{% endif %}>
+                    <a data-toggle="tooltip" title="Home" data-placement="bottom" href="/dashboard/">
+                        <div class="icon">
+                            <i class="material-icons">home</i>
+                        </div>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <!--<li>-->
+                    <!--<a href="/dashboard/forms/">-->
+                        <!--<img src="/static/dashboard/images/icon-dashboard.png" />-->
+                        <!--<span>Forms</span>-->
+                    <!--</a>-->
+                <!--</li>-->
+                {% if perms.professional.list_professional %}
+                <li {% if request.path == '/dashboard/professional' %}class="active"{% endif %} >
+                    <a data-toggle="tooltip" title="Profissionais" data-placement="bottom" href="/dashboard/professional">
+                        <div class="icon">
+                            <i class="material-icons">work</i>
+                        </div>
+                        <span>Profissionais</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% if perms.professional.list_professional %}
+                <li {% if request.path == '/dashboard/professional/price_log' %}class="active"{% endif %} >
+                    <a data-toggle="tooltip" title="Profissionais (Log Preços)" data-placement="bottom" href="/dashboard/professional/price_log">
+                        <div class="icon">
+                            <i class="material-icons">settings_cell</i>
+                        </div>
+                        <span>Profissionais (Log Preços)</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% if perms.service_core.change_attendance %}
+                <li {% if request.path == '/after_sale/attendance/list' %}class="active"{% endif %}>
+                    <a data-toggle="tooltip" title="Atendimentos" data-placement="bottom" href="{%url 'after_sale:attendance_list' %}">
+                        <div class="icon">
+                            <i class="material-icons">local_grocery_store</i>
+                        </div>
+                        <span>Atendimentos</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% if perms.professional.list_professional %}
+                <li {% if request.path == '/dashboard/professional/price_log' %}class="active"{% endif %} >
+                    <a data-toggle="tooltip" title="Notificações" data-placement="bottom" href="/dashboard/message/push">
+                        <div class="icon">
+                            <i class="material-icons">announcement</i>
+                        </div>
+                        <span>Notificações</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% if perms.professional.list_executive %}
+                <li {% if request.path == '/dashboard/executive' %}class="active"{% endif %} >
+                    <a data-toggle="tooltip" title="Executivos" data-placement="bottom" href="{%url 'professional:executive-list' %}">
+                        <div class="icon">
+                            <i class="material-icons">location_city</i>
+                        </div>
+                        <span>Executivos</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% if perms.professional.change_seller %}
+                <li {% if request.path == '/dashboard/seller' %}class="active"{% endif %} >
+                    <a data-toggle="tooltip" title="Vendedores" data-placement="bottom" href="{%url 'professional:seller-list' %}">
+                        <div class="icon">
+                            <i class="material-icons">shopping_basket</i>
+                        </div>
+                        <span>Vendedores</span>
+                    </a>
+                </li>
+                {% endif %}
+                <li {% if request.path == '/dashboard/company/' %}class="active"{% endif %}>
+                    <a data-toggle="tooltip" title="Clentes PJ" data-placement="bottom" href="{%url 'company:company-list' %}">
+                        <div class="icon">
+                            <i class="material-icons">business</i>
+                        </div>
+                        <span>Clientes PJ</span>
+                    </a>
+                </li>
+                <li {% if request.path == '/dashboard/company/sale' %}class="active"{% endif %} >
+                    <a data-toggle="tooltip" title="Vendas" data-placement="bottom" href="{%url 'company:sale-list' %}">
+                        <div class="icon">
+                            <i class="material-icons">attach_money</i>
+                        </div>
+                        <span>Vendas</span>
+                    </a>
+                </li>
+                <li {% if request.path == '/after_sale/transaction/list' %}class="active"{% endif %}>
+                    <a data-toggle="tooltip" title="Relatórios Financeiros" data-placement="bottom" href="{%url 'after_sale:transaction_list' %}">
+                        <div class="icon">
+                            <i class="material-icons">bar_chart</i>
+                        </div>
+                        <span>Relatórios Financeiros</span>
+                    </a>
+                </li>
+                <li {% if request.path == '/lead/list' %}class="active"{% endif %}>
+                    <a data-toggle="tooltip" title="Leads" data-placement="bottom" href="{%url 'lead:profissional_lead_list' %}">
+                        <div class="icon">
+                            <i class="material-icons">person_add</i>
+                        </div>
+                        <span>Leads</span>
+                    </a>
+                </li>
+                <li {% if request.path == '/payment/voucher' %}class="active"{% endif %}>
+                    <a data-toggle="tooltip" title="Cupons" data-placement="bottom" href="{%url 'payment:voucher-list' %}">
+                        <div class="icon">
+                            <i class="material-icons">local_offer</i>
+                        </div>
+                        <span>Cupons</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- #Menu -->
+    </aside>
+
+    <!-- #END# Left Sidebar -->
+    <section class="content">
+        {% include 'includes/top_bar.html' %}
+        <div class="container-fluid">
+            {% block content %} {% endblock %}
+        </div>
+    </section>
+
+    <!-- Jquery Core Js -->
+    <script src="/static/dashboard/plugins/jquery/jquery.min.js"></script>
+    <!-- Jquery Validate -->
+    <script src="/static/dashboard/plugins/jquery-validation/jquery.validate.js"></script>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <!-- Autosize Plugin Js -->
+    <script src="/static/dashboard/plugins/autosize/autosize.js"></script>
+    <!-- Bootstrap Core Js -->
+    <script src="/static/dashboard/plugins/bootstrap/js/bootstrap.js"></script>
+    <!-- Select Plugin Js -->
+    <script src="/static/dashboard/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <!-- Moment Plugin Js -->
+    <script src="/static/dashboard/plugins/momentjs/moment.js"></script>
+    <!-- DatetimePicker Plugin Js -->
+    <script src="/static/dashboard/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <!-- Waves Effect Plugin Js -->
+    <script src="/static/dashboard/plugins/node-waves/waves.js"></script>
+    <!-- Demo Js -->
+    <script src="/static/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
+    <!-- Custom Js -->
+    <script src="/static/dashboard/js/admin.js"></script>
+    <script src="/static/dashboard/js/demo.js"></script> {% block javascript %} {% endblock %}
+</body>
+
+</html>
+
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip({ z-index: 9999 });
+});
+</script>

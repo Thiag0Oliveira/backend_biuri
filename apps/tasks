@@ -1,0 +1,33 @@
+#LOGIN
+Post Login ok
+Post Facebook ok
+Post Register
+
+#Agendamento
+Get All Categorias ok
+Get All Servicos ok
+Get All Profissionais ok
+Get Detail Profissional ok
+Get Agendamento ok
+Get Agendamentos (Profissional ou Cliente) ok
+Post Agendamento ok
+Put Agendamento ok
+Get Agendamento/profissional ok
+Get Agendamento/agenda ok
+Post profissionais Favoritos
+
+#Profile
+Get Profile
+Put Profile
+
+#Financeiro
+Get Cartões ok
+Post Cartões ok
+delete Cartões ok
+
+# Profissional
+Get Dashboard
+get avaliações
+Get Agenda
+Post Agenda
+Put Agenda

@@ -1,0 +1,108 @@
+{% load template_tagcategory %}
+{%if formset.non_form_errors %}
+<p>{{ formset.non_form_errors }}</p>
+{%endif%}
+<table class="table">
+        {{ formset.management_form }}
+            {% for form in formset.forms %}
+                {{ form.management_form }}
+                <tr class="formset_row">
+                    <td style="display: none;">
+                        {{form.instance.pk }}
+                    </td>
+                    {% for hidden in form.hidden_fields %}
+                                    {{ hidden }}
+                    {% endfor %}
+                    <td style="display:none">
+                        {{form.day_of_week}}
+                    </td>
+                    <td>
+                        <b>{{form.day_of_week.value|day_of_week}}</b>
+                    </td>
+                    <tr>
+                    <td>
+                        {{form.provide_all_day}}
+                        <label for="{{form.provide_all_day.id_for_label}}"> {{form.provide_all_day.label}}</label>
+                    </td>
+    </tr>
+                        <tr>
+
+                    <td>
+                    {{form.dawn_morning}}
+                        <label for="{{form.dawn_morning.id_for_label}}"> {{form.dawn_morning.label}}</label>
+                    </td>
+                    <td {% if not form.dawn_morning.value %} style="display:none" {%endif%} id="{{form.dawn_morning_range_begin.id_for_label}}">
+                        {{form.dawn_morning_range_begin}}
+                    </td>
+                    <td {% if not form.dawn_morning.value %} style="display:none" {%endif%} id="{{form.dawn_morning_range_end.id_for_label}}">
+                        {{form.dawn_morning_range_end}}
+                    </td>
+                        </tr>
+    <tr>
+                    <td>
+                        {{form.afternoon_night}}
+                        <label for="{{form.afternoon_night.id_for_label}}"> {{form.afternoon_night.label}}</label>
+
+                    </td>
+                    <td {% if not form.afternoon_night.value %} style="display:none" {%endif%} id="{{form.afternoon_night_range_begin.id_for_label}}">
+                        {{form.afternoon_night_range_begin}}
+                    </td>
+                    <td {% if not form.afternoon_night.value %} style="display:none" {%endif%} id="{{form.afternoon_night_range_end.id_for_label}}">
+                        {{form.afternoon_night_range_end}}
+                    </td>
+    </tr>
+                </tr>
+            {% endfor %}
+</table>
+<script type="text/javascript">
+    $('.formset_row').formset({
+        addText: 'adicionar',
+        deleteText: 'remover',
+    });
+    var divsToHide = document.getElementsByClassName("add-row");
+    for(var i = 0; i < divsToHide.length; i++){
+        divsToHide[i].style.display = "none"; // depending on what you're doing
+    };
+    var othersdivsToHide = document.getElementsByClassName("delete-row");
+    for(var i = 0; i < othersdivsToHide.length; i++){
+        othersdivsToHide[i].style.display = "none"; // depending on what you're doing
+    };
+    function ClickCheckbox(checkboxElem) {
+  const id = checkboxElem.id.split('-')
+  const id_morning = document.getElementById(`${id[0]}-${id[1]}-dawn_morning`)
+  const id_afternoon = document.getElementById(`${id[0]}-${id[1]}-afternoon_night`)
+  const id_provide_all_day = document.getElementById(`${id[0]}-${id[1]}-provide_all_day`)
+  if (checkboxElem.checked) {
+    if (id[2] === 'dawn_morning') {
+        id_provide_all_day.checked = false
+    }
+    if (id[2] === 'afternoon_night') {
+        id_provide_all_day.checked = false
+    }
+    if (id[2] === 'provide_all_day') {
+        id_morning.checked = false
+        id_afternoon.checked = false
+    }
+  } else {
+    if (id[2] === 'provide_all_day') {
+        id_morning.checked = true
+        id_afternoon.checked = true
+    }
+  }
+  ChangeCheckboxElements(id_morning)
+  ChangeCheckboxElements(id_afternoon)
+}
+
+function ChangeCheckboxElements(checkboxElem) {
+  const id = checkboxElem.id
+  const element_range_begin = document.getElementById(`${id}_range_begin`)
+  const element_range_end = document.getElementById(`${id}_range_end`)
+  if (checkboxElem.checked) {
+    element_range_begin.style.display = ""
+    element_range_end.style.display = ""
+  } else {
+    element_range_begin.style.display = "none"
+    element_range_end.style.display = "none"
+  }
+}
+</script>

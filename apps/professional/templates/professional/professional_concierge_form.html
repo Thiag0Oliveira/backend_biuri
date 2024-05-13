@@ -1,0 +1,135 @@
+{% extends 'default/base_dashboard.html' %}
+{% block css %}
+
+{% endblock %}
+{% block content %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.js"></script>
+<!-- Vertical Layout | With Floating Label -->
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    Atendimento Concierge #{{object.pk}}
+                    <small>Informações do Atendimento</small>
+                </h2>
+            </div>
+            <div class="body">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h2 class="card-inside-title">Informações do Cliente</h2>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ user_form.first_name }}
+                            <label class="form-label">{{user_form.first_name.label}}</label>
+
+                        </div>
+                        {{ user_form.first_name.errors }}
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ user_form.last_name }}
+                            <label class="form-label">{{user_form.last_name.label}}</label>
+
+                        </div>
+                        {{ user_form.last_name.errors }}
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ user_form.email }}
+                            <label class="form-label">{{user_form.email.label}}</label>
+
+                        </div>
+                        {{ user_form.email.errors }}
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ customer_form.celphone }}
+                            <label class="form-label">{{customer_form.celphone.label}}</label>
+                            {{ customer_form.celphone.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <p>{{customer_form.gender.label_tag}}</p>
+                            {{ customer_form.gender }}
+                            {{ customer_form.gender.errors }}
+                        </div>
+                    </div>
+                    <h2 class="card-inside-title">Informações do Atendimento</h2>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ form.observation }}
+                            <label class="form-label">{{form.observation.label}}</label>
+                            {{ form.observation.errors }}
+                        </div>
+                    </div>
+                    <h2 class="card-inside-title">Informações Internas</h2>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ form.observation_internal }}
+                            <label class="form-label">{{form.observation_internal.label}}</label>
+                            {{ form.observation_internal.errors }}
+                        </div>
+                    </div>
+                    <h2 class="card-inside-title">Endereço</h2>
+                    {% for radio in concierge_form.address %}
+                    {{ radio.tag }}
+                        <label for="{{ radio.id_for_label }}">
+                            {{ radio.choice_label }}
+                        </label>
+                    {% endfor %}
+                    <div id="address">
+                    {% include 'core/address_form.html' with form=address_form%}
+                        </div>
+                    <input type="submit"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Vertical Layout | With Floating Label -->
+{% endblock %}
+{% block javascript %}
+<script>
+    lastSelected = $('[name="concierge_form-address"]:checked').val();
+    $(document).on('click', '[name="concierge_form-address"]', function () {
+        lastSelected = $(this).val();
+        if (lastSelected != '') {
+            document.getElementById("id_address_form-postal_code").required = false;
+            document.getElementById("address").style.visibility = "hidden";
+        } else {
+            document.getElementById("id_address_form-postal_code").required = true;
+            document.getElementById("address").style.visibility = "visible"
+        }
+    });
+</script>
+<script>
+    $("#id_cidades").select2({
+    minimumInputLength: 3,
+    ajax: {
+        url: '/citys',
+        dataType: 'json',
+        type: "GET",
+        data: function (params) {
+          var query = {
+            term: params.term
+          }
+          return query;
+        },
+        processResults: function (data) {
+        return {
+            results: $.map(data.items, function (item) {
+                return {
+                    text: item.name + ' - ' + item.state__uf,
+                    id: item.id,
+                }
+            })
+        };
+    }
+    }
+});
+$("#id_bank_account_form-bank").select2();
+</script>
+{% endblock %}

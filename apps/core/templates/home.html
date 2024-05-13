@@ -1,0 +1,322 @@
+<!DOCTYPE html><html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>BIURI</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link rel="stylesheet" href="/static/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/vendor/simple-line-icons/css/simple-line-icons.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/vendor/sweetalert2/dist/sweetalert2.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/styles.css" rel="stylesheet">
+
+  </head>
+
+  <body id="page-top" class="executivo">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-toggleable-md" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">
+          <img src="/static/img/logo.png" />
+        </a>
+        <button class="navbar-toggler pull-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <img src="/static/img/biuri-menu-icon.png" />
+          </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-5">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#comofunciona">Como funciona</a>
+            </li>
+            <li class="nav-item ml-3">
+              <a class="nav-link js-scroll-trigger" href="#features">Vantagens</a>
+            </li>
+            <li class="nav-item ml-3">
+              <a class="nav-link js-scroll-trigger" href="#contact">Faça parte</a>
+            </li>
+            <!--<li class="nav-item ml-3 d-xlg-none d-lg-none">-->
+              <!--<a class="nav-link js-scroll-trigger" href="/">Biuri Profissional</a>-->
+            <!--</li>-->
+          </ul>
+          <!--<ul class="navbar-nav ml-auto d-none d-xlg-block d-lg-block">-->
+            <!--<a class="btn btn-outline" href="/" style="margin-right: 6rem;" >Biuri Profissional</a>-->
+          <!--</ul>-->
+        </div>
+      </div>
+    </nav>
+
+    <header class="masthead">
+      <div class="container h-100">
+        <div class="row h-100">
+          <div class="col-lg-7 my-auto">
+            <div class="header-content">
+              <h1>Conectamos pessoas com profissionais de beleza </h1>
+              <h2 class="mb-5">Faça parte desse movimento, torne-se um Executivo Biuri e transforme a sua vida!</h2>
+            </div>
+          </div>
+          <div class="col-lg-5 my-auto form-signup">
+            <form id="form-signup-executive" role="form" action="{% url 'add_executive_lead' %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="card mx-auto" style="max-width: 315px">
+                <div class="card-block">
+                  <h3 class="card-title text-center">Cadastre-se</h3>
+                  <div class="card-text">
+                      <input type="hidden" id="executive-id" value="" name="executive-id" />
+                      <div class="form-group">
+                         {{ simpleleadform.name }}
+                      </div>
+                      <!--<div class="form-group">-->
+                        <!--{{ simpleleadform.category }}-->
+                      <!--</div>-->
+                      <div class="form-group">
+                        {{ simpleleadform.cpf }}
+                      </div>
+                      <div class="form-group">
+                        {{ simpleleadform.email }}
+                      </div>
+                      <div class="form-group">
+                        {{ simpleleadform.telephone }}
+                      </div>
+                      <p id="erro" class="text-center" style="font-size: 13px;color: #e83939;"></p>
+                  </div>
+                  <button  class="btn gradiente btn-block btn-primary" type="submit">Prosseguir</button>
+                  <p class="termos">Ao continuar, eu concordo que a Biuri e seus representantes podem entrar em contato comigo por e-mail, telefone ou SMS (inclusive por sistema de discagem telefônica automática) no endereço de e-mail ou número que eu forneci, incluindo para finalidades de marketing. Li e entendo a Declaração de privacidade pertinente.</p>
+                </div>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="how-it-works text-center" id="comofunciona">
+      <div class="container ">
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="section-header">Como funciona</h2>
+            <div class="row badges">
+                <div class="col-lg-4">
+                  <img src="/static/img/precadastro-biuri.png">
+                  <h4 class="badge-title">Pré-cadastro</h4>
+                  <p  class="badge-description">Preencha as suas <br>informações no nosso site</p>
+                </div>
+                <div class="col-lg-4">
+                  <img src="/static/img/validacao-biuri.png">
+                  <h4 class="badge-title">Aguarde a sua Validação</h4>
+                  <p  class="badge-description">Validaremos o seu perfil <br>e entraremos em contato</p>
+                </div>
+                <div class="col-lg-4">
+                  <img src="/static/img/executivo-biuri.png">
+                  <h4 class="badge-title">Torne-se um Executivo</h4>
+                  <p  class="badge-description">Perfil validado? <br> Bem vindo à plataforma</p>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="features bg-gray" id="features">
+      <div class="container">
+        <h2 class="section-header">Vantagens</h2>
+        <div class="row">
+          <div class="col-md-8 my-auto">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="feature-item xs-left">
+                    <img src="/static/img/biuri-indique.png">
+                     <h4 class="feature-title">Indique profissionais</h4>
+                    <p  class="feature-description">Pré-cadastre profissionais de <br> beleza na plataforma</p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="feature-item xs-right">
+                    <img src="/static/img/biuri-promova.png">
+                      <h4 class="feature-title">Promova a plataforma</h4>
+                      <p  class="feature-description">Divulgue Biuri e aumente suas <br> chances de ganhos</p>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="feature-item xs-left">
+                      <img src="/static/img/biuri-ganhe.png">
+                    <h4 class="feature-title">Ganhe dinheiro</h4>
+                    <p  class="feature-description">Seja comissionado e ganhe uma<br> renda extra</p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="feature-item xs-right">
+                    <img src="/static/img/biuri-trabalhe.png">
+                    <h4 class="feature-title">Trabalhe de qualquer lugar</h4>
+                    <p  class="feature-description">Indique profissionais e promova a plataforma sem sair de casa</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mx-auto">
+            <iframe src="https://marvelapp.com/3aa58ha?emb=1" width="100%" height="auto" frameborder="0" allowtransparency="true"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="cta-content">
+        <div class="container">
+          <div class="col-sm-6 pull-right text-right">
+            <p>Decole conosco, venha fazer parte do nosso time de executivos<br></p>
+            <a href="#contact" class="btn btn-xl btn-success js-scroll-trigger">Cadastre-se</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <footer>
+      <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <img class="logo" src="/static/img/biuri-logo-black.png" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5">
+              <div class="row">
+                <div class="col-lg-12">
+                  <ul class="list-inline">
+                    <li class="list-inline-item">
+                      <a href="#">Contato</a>
+                    </li>
+                    <li class="list-inline-item">
+                      <a href="#">Termos de Serviço</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-12">
+                  <p class="copyright">Biuri © 2017. Todos os direitos reservados</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-7">
+              <div class="row">
+                <div class="col-md-6 ">
+                  <div class="links-social">
+                      <a href="https://www.facebook.com/biuriapp" target="_blank">
+                        <img src="/static/img/icon-facebook-black.png" />
+                        Facebook
+                      </a>
+                      <a  href="https://www.instagram.com/biuriapp" target="_blank">
+                          <img src="/static/img/icon-instagram-black.png" />
+                          Instagram
+                      </a>
+                  </div>
+                </div>
+                <div class="col-md-6 ">
+                    <a  href="https://www.google.com.br/maps/place/R.+do+Bom+Jesus,+180+-+Recife,+PE,+50030-170/@-8.0619755,-34.8735442,17z/data=!3m1!4b1!4m5!3m4!1s0x7ab18a37b291253:0x7b41307136373ade!8m2!3d-8.0619808!4d-34.8713555" target="_blank">
+                        <!--<p>+ 55 5555 5555</p>-->
+                        <p>Rua do Bom Jesus, 180, Recife - PE/Brasil.</p>
+                    </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </footer>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <p class="modal-title" id="exampleModalLabel">Dados pessoais</p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="form-signup-executive-modal" role="form" action="{% url 'lead:update_executive_lead' %}" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+        <div class="modal-body">
+          <div class="row">              
+              <div class="form-group col-md-4">
+                {{ executiveleadform.name }}
+              </div>
+              <div class="form-group col-md-4">
+                  {{ executiveleadform.cpf }}
+              </div>
+              <div class="form-group col-md-4">
+                  {{ executiveleadform.rg }}
+              </div>
+              <div class="form-group col-md-4">
+                  {{ executiveleadform.birthdate }}
+              </div>
+              <div class="form-group col-md-4">
+                  {{ executiveleadform.gender }}
+              </div>
+              <div class="form-group col-md-4">
+                  {{ executiveleadform.civil_status }}
+              </div>
+              <div class="form-group col-md-4">
+                  {{ addressform.postal_code }}
+              </div>
+              <div class="form-group col-md-4">
+                  {{ addressform.address }}
+              </div>
+              <div class="form-group col-md-4">
+                  {{ addressform.number }}
+              </div>
+              <div class="form-group col-md-4">
+                  {{ addressform.complemento }}
+              </div>
+              <div class="form-group col-md-4">
+                  {{ executiveleadform.telephone }}
+              </div>
+              <div class="form-group col-md-4">
+                  {{ executiveleadform.celphone }}
+              </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn gradiente">Enviar</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="/static/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/static/vendor/jquery-mask-plugin/dist/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="/static/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
+
+
+    <!-- Custom scripts for this template -->
+    <script src="/static/js/main.js"></script>
+
+    <!-- Custom scripts  -->
+    <script src="/static/js/home.js"></script>
+
+  </body>
+
+</html>

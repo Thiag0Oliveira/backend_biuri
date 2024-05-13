@@ -1,0 +1,52 @@
+{% load template_tagcategory %}
+{%if formset.non_form_errors %}
+<p>{{ formset.non_form_errors }}</p>
+{%endif%}
+<table class="table">
+            {{ formset.management_form }}
+
+            {% for form in formset.forms %}
+                {% if forloop.first %}
+                    <thead>
+                    <tr>
+                        {% for field in form.visible_fields %}
+                        {% if forloop.first %}
+                        <th>Serviço</th>
+                        <th>{{ field.label|capfirst }}</th>
+                        {% else %}
+                            <th>{{ field.label|capfirst }}</th>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                {% endif %}
+                <tr class="formset_row">
+                    {% for field in form.visible_fields %}
+                        <td>
+                            {# Include the hidden fields in the form #}
+                            {% if forloop.first %}
+                                {% for hidden in form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                            <div>{{ form.instance.service.category.name }} - {{ form.instance.service.name }} - {{form.instance.service.gender}} <i class="material-icons" title="{{form.instance.service.description}}" style="font-size:20px;">info</i> </div>
+                        </td><td>
+                            <div>{{ field }}</div>
+                            {% else%}
+                            {{ field.errors.as_ul }}
+                            {{ field }}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+</table>
+<script type="text/javascript">
+    $('.formset_row').formset({
+        addText: 'adicionar',
+        deleteText: 'remover',
+    });
+    var divsToHide = document.getElementsByClassName("add-row");
+    for(var i = 0; i < divsToHide.length; i++){
+        divsToHide[i].style.display = "none"; // depending on what you're doing
+    };
+</script>

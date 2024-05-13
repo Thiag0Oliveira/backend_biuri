@@ -1,0 +1,94 @@
+// Bootstrap overrides for this template
+.bg-primary {
+    background: $theme-primary;
+    background: -webkit-linear-gradient($theme-primary, darken($theme-primary, 5%));
+    background: linear-gradient($theme-primary, darken($theme-primary, 5%));
+}
+
+.text-primary {
+    color: $theme-primary;
+}
+
+.card{
+    border-radius: 13px;
+    .card-title{
+        font-size: 20px;
+        color: #4E4E4E;
+        font-weight: 300;
+        padding-bottom: .2rem;
+    }
+}
+
+.no-gutter > [class*='col-'] {
+    padding-right: 0;
+    padding-left: 0;
+}
+.btn{
+    border: none;
+    font-size: 18px;
+    font-weight: 300;
+    padding: .6rem 1rem;
+    margin-bottom: 1rem;        
+    &.gradiente{
+        margin-top: 2rem;
+        background: #667EEA;
+        background: -moz-linear-gradient(-45deg, #764BA2 0%, #764BA2 100%);
+        background: -webkit-gradient(left top, right bottom, color-stop(0%, #764BA2), color-stop(100%, #667EEA));
+        background: -webkit-linear-gradient(-45deg, #764BA2 0%, #667EEA 100%);
+        background: -o-linear-gradient(-45deg, #764BA2 0%, #667EEA 100%);
+        background: -ms-linear-gradient(-45deg, #764BA2 0%, #667EEA 100%);
+        background: linear-gradient(135deg, #764BA2 0%, #667EEA 100%);
+    }
+    
+}
+.btn-outline {
+    color: $white  !important;
+    border-radius: 25px !important;
+    border-color: transparent;
+    margin-bottom: 0;
+    padding: .8rem 1rem;
+    background: rgba(248,198,0,1);
+    background: -moz-linear-gradient(left, rgba(248,198,0,1) 0%, rgba(255,153,0,1) 100%);
+    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(248,198,0,1)), color-stop(100%, rgba(255,153,0,1)));
+    background: -webkit-linear-gradient(left, rgba(248,198,0,1) 0%, rgba(255,153,0,1) 100%);
+    background: -o-linear-gradient(left, rgba(248,198,0,1) 0%, rgba(255,153,0,1) 100%);
+    background: -ms-linear-gradient(left, rgba(248,198,0,1) 0%, rgba(255,153,0,1) 100%);
+    background: linear-gradient(to right, rgba(248,198,0,1) 0%, rgba(255,153,0,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8c600', endColorstr='#ff9900', GradientType=1 );
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+        color: $white;
+        border-color: transparent;
+        transition: none;
+        
+    }
+}
+.profissional{
+    .btn-outline {
+        color: $white  !important;
+        border-color: $white;
+        &:hover,
+        &:focus,
+        &:active,
+        &.active {
+            color: $white;
+            border-color: $white;
+            background-color: transparent;
+        }
+    }
+}
+.btn {
+    border-radius: 6px;
+    @include heading-font;
+    &.btn-success{
+        background-color: #60E0B2;
+        border-color:     #60E0B2;
+    }
+}
+
+.btn-xl {
+    font-size: 24px;
+    padding: 4px 24px;
+}

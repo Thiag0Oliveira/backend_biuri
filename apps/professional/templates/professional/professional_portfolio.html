@@ -1,0 +1,482 @@
+{% extends 'default/base_dashboard.html' %}
+{% block css %}
+<link href="/static/dashboard/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- NORMAL Basic Table -->
+<div class="modal fade in" id="defaultModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="defaultModalLabel">Filtros</h4>
+                        </div>
+                        <form method="get">
+                        <div class="modal-body">
+                            {% for field in filter.form %}
+                                <div class="form-group form-float">
+                                    <label class="form-label">{{field.label}}</label>
+                                    <div class="form-line">
+                                        {{ field }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-link waves-effect">Filtrar</button>
+                        </div>
+                 </form>
+                    </div>
+                </div>
+            </div>
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+                        <div class="header bg-cyan">
+                            <h2>
+                                Filtros
+                            </h2>
+                        </div>
+                                        <form method="get">
+                        <div class="card-body body">
+                            {% for field in filter.form %}
+                            <div class="col-sm-3">
+                                <div class="form-group form-float">
+                                    <label class="form-label">{{field.label}}</label>
+                                    <div class="form-line">
+                                        {{ field }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-info waves-effect">Filtrar</button>
+                        </div>
+                             </form>
+
+                    </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+                        <div class="header ">
+                            <h2>
+                                Serviços
+                            </h2>
+                        </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div id="line"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div id="container"></div>
+
+                    </div>
+                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                                             <div id="container1"></div>
+
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div style="height: 350px; overflow: auto;">
+  <table class="table table-bordered table-striped" id="category-table">
+    <thead>
+      <tr>
+        <th scope="col">Categoria</th>
+        <th scope="col">Quantidade<br>Profissionais</th>
+      </tr>
+    </thead>
+    <tbody style="height: 10px !important; overflow: scroll; ">
+    {%for category in professional_categories%}
+      <tr>
+        <th scope="row">{{category.category__name}}</th>
+        <td>{{category.y}}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+
+
+</div>
+                    </div>
+<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+<div class="table-wrapper-scroll-y" style="display: none">
+                                  <table class="table table-bordered table-striped" id="service-table">
+    <thead>
+      <tr>
+        <th scope="col">Serviço</th>
+        <th scope="col">Quantidade<br>Profissionais</th>
+      </tr>
+    </thead>
+    <tbody style="height: 10px !important; overflow: scroll; ">
+      {%for service in professional_services%}
+      <tr>
+        <th scope="row">{{service.services__service__name}}</th>
+        <td>{{service.y}}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+    {{date_professional|safe}}
+</div>
+<div style="height: 350px; overflow: auto;">
+  <table class="table table-bordered table-striped" id="service-table-2">
+    <thead>
+      <tr>
+        <th scope="col">Serviço</th>
+        <th scope="col">Quantidade<br>Profissionais</th>
+        <th scope="col">Preço Mínimo (Média)</th>
+        <th scope="col">Preço Máximo (Média)</th>
+        <th scope="col">Tempo Médio (minutos)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%for service in professional_services%}
+      <tr>
+        <th scope="row">{{service.services__service__name}}</th>
+        <td>{{service.y}}</td>
+        <td>R$ {{service.media_minimum|floatformat:2}}</td>
+        <td>R$ {{service.media_maximum|floatformat:2}}</td>
+        <td>{{service.media_tempo|floatformat:0}}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+                    </div>
+                </div>
+
+            </div>
+                    </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        {% if not professional %}
+        <div class="card">
+            <div class="body table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>CPF</th>
+                            <th>Telefone</th>
+                            <th>Area</th>
+                            <th>Status</th>
+                            <th width="200">Observações/Pendências</th>
+                            {% if perms.professional.change_professional %}
+                            <th>Opções</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for object in filter.qs %}
+    <tr>
+        <th scope="row">{{object.user.first_name}}</th>
+        <th scope="row">{{object.user.username}}</th>
+        <th scope="row">{%if object.celphone %}{{object.celphone}}{%else%}-{%endif%}</th>
+        <th scope="row">{{object.category}}</th>
+        <th scope="row">{%if object.professional_enabled %}Liberado{%else%}Não Liberado{%endif%}</th>
+        <th scope="row">{%if object.observation %}{{object.observation}}{%else%}-{%endif%}</th>
+        {% if perms.professional.change_professional %}
+        <th>
+            <a data-toggle="tooltip" title="Editar Dados do Profissional" data-placement="bottom" href="{% url 'professional:professional-update' object.pk %}">
+                <i class="material-icons">edit</i>
+            </a>
+            <a data-toggle="tooltip" title="Editar Cidades/Serviços" data-placement="bottom" href="{% url 'professional:professional-category' object.pk %}">
+                <i class="material-icons">style</i>
+            </a>
+            <a data-toggle="tooltip" title="Editar Preços de Serviços" data-placement="bottom" href="{% url 'professional:professional-service' object.pk %}">
+                <i class="material-icons">attach_money</i>
+            </a>
+            <a data-toggle="tooltip" title="Editar Horários" data-placement="bottom" href="{% url 'professional:professional-schedule' object.pk %}">
+                <i class="material-icons">alarm</i>
+            </a>
+            <a type="button" data-toggle="tooltip" title="Resetar Senha do profissional" data-placement="bottom" href="#" onclick="resetPassword({{object.pk}},{{object.celphone}})">
+                <i class="material-icons">lock</i>
+            </a>
+            <a type="button" data-toggle="tooltip" title="Gerar atendimento de teste" data-placement="bottom" href="#" onclick="testService({{object.pk}})">
+                <i class="material-icons">touch_app</i>
+            </a>
+        </th>
+        {% endif %}
+    </tr>
+    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <a href="professional/category">
+                    <div class="info-box bg-cyan hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">style</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Serviços/Cidades</div>
+                            <div class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20">0</div>
+                        </div>
+                    </div>
+            </a>
+                </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <a href="professional/service">
+                    <div class="info-box bg-light-green hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">attach_money</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Preços</div>
+                            <div class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20">0</div>
+                        </div>
+                    </div>
+                        </a>
+                </div>
+    </div>
+    {% endif %}
+</div>
+<!-- #END# NORMAL Basic Table -->
+
+
+
+{% endblock %}
+{% block javascript %}
+
+<script>
+function resetPassword(professional, celphone1) {
+    let success = false;
+    swal({
+      title: 'Confirme o telefone do profissional',
+      input: 'text',
+      inputValue: celphone1,
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Confirmar',
+      showLoaderOnConfirm: true,
+      preConfirm: (celphone) => {
+        return fetch(`/dashboard/professional/${professional}/reset_password?celphone=${celphone}`)
+          .then(response => {
+            success = true;
+          })
+          .catch(error => {
+            swal({
+                  title: 'OPS',
+                })
+          })
+    },
+    allowOutsideClick: () => !swal.isLoading()
+    }).then(response => {
+            if (success === true){
+                swal({
+                  type: 'success',
+                  title: 'Senha atualizada!',
+                  text: 'A senha foi enviada para o telefone informado',
+                  timer: 1500,
+                });
+            };
+          })
+    }
+function testService(professional) {
+    let success = false;
+    swal({
+      title: 'Criar serviço de teste?',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Confirmar',
+      showLoaderOnConfirm: true,
+      preConfirm: () => {
+        return fetch(`/dashboard/professional/${professional}/test_service`)
+          .then(response => {
+            success = true;
+          })
+          .catch(error => {
+            swal({
+                  title: 'OPS',
+                })
+          })
+    },
+    allowOutsideClick: () => !swal.isLoading()
+    }).then(response => {
+            if (success === true){
+                swal({
+                  type: 'success',
+                  title: 'Atendimento Teste!',
+                  text: 'Criado com sucesso',
+                  timer: 1500,
+                });
+            };
+          })
+    }
+</script>
+<script src="/static/dashboard/plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="/static/dashboard/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="/static/dashboard/js/pages/tables/jquery-datatable.js"></script>
+<script>
+var highchartsOptions = Highcharts.setOptions({
+      lang: {
+            loading: 'Aguarde...',
+            months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+            weekdays: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+            shortMonths: ['Jan', 'Fev', 'Mar', 'Abr', 'Maio', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            exportButtonTitle: "Exportar",
+            printButtonTitle: "Imprimir",
+            rangeSelectorFrom: "De",
+            rangeSelectorTo: "Até",
+            rangeSelectorZoom: "Periodo",
+            downloadPNG: 'Download imagem PNG',
+            downloadJPEG: 'Download imagem JPEG',
+            downloadPDF: 'Download documento PDF',
+            downloadSVG: 'Download imagem SVG'
+            // resetZoom: "Reset",
+            // resetZoomTitle: "Reset,
+            // thousandsSep: ".",
+            // decimalPoint: ','
+            }
+      }
+  );
+var groupSmallData = function(series, number) {
+    var groupValue = 0,
+      newData = [];
+    Highcharts.each(series.data, function(p) {
+      if (series.data.indexOf(p) + 1 > number) {
+        groupValue += p.y;
+      } else {
+        newData.push([p.name, p.y])
+      }
+    });
+    <!--if (groupValue > 0){-->
+        <!--newData.push(['Outros', groupValue]);-->
+    <!--}-->
+    series.setData(newData)
+  };
+var cumulativeData = function(series) {
+    var groupValue = 0,
+      newData = [];
+    Highcharts.each(series.data, function(p) {
+      groupValue += p.y;
+      newData.push([p.name, p.y])
+    });
+    series.setData(newData)
+};
+Highcharts.chart('container', {
+    data: {
+        table: 'category-table'
+    },
+    chart: {
+        type: 'pie'
+    },
+    title: {
+        text: 'Profissionais por Categoria'
+    },
+    yAxis: {
+        allowDecimals: false,
+        title: {
+            text: 'Units'
+        }
+    },
+    tooltip: {
+        formatter: function () {
+            return '<b>' + this.series.name + '</b><br/>' +
+                this.point.y + ' ' + this.point.name.toLowerCase();
+        }
+    }
+    }, function(chart) {
+        var series = chart.series[0];
+        groupSmallData(series, 6)}
+    );
+                </script>
+<script>
+Highcharts.chart('container1', {
+    data: {
+        table: 'service-table'
+    },
+    chart: {
+        type: 'bar',
+    },
+    title: {
+        text: 'Profissionais por Serviço TOP 15'
+    },
+    yAxis: {
+        allowDecimals: false,
+        title: {
+            text: 'Units'
+        }
+    },
+    plotOptions: {
+        series: {
+            dataLabels: {
+                enabled: false
+            }
+        }
+    },
+    }, function(chart) {
+        var series = chart.series[0];
+        groupSmallData(series, 15)}
+    );
+                </script>
+<script>
+Highcharts.stockChart('line', {
+    data: {
+        table: 'date-professional'
+    },
+    chart: {
+        type: 'line'
+    },
+    title: {
+        text: 'Histórico de Cadastro de profissionais'
+    },
+    xAxis: {
+        type: 'datetime',
+        <!--minTickInterval: moment.duration(1, 'month').asMiliseconds()-->
+    },
+    rangeSelector: {
+        buttonTheme: {
+            width: 100
+            },
+        inputDateFormat: '%d/%m/%Y',
+        inputEditDateFormat: '%d/%m/%Y',
+        buttons: [{
+                    type: 'month',
+                    count: 1,
+                    text: '1 mês'
+                }, {
+                    type: 'month',
+                    count: 3,
+                    text: '3 meses'
+                }, {
+                    type: 'month',
+                    count: 6,
+                    text: '6 meses'
+                }, {
+                    type: 'ytd',
+                    text: 'Ano Atual'
+                }, {
+                    type: 'year',
+                    count: 1,
+                    text: '1 Ano'
+                }, {
+                    type: 'all',
+                    text: 'Todas as Datas'
+                }]
+    },
+    yAxis: {
+        allowDecimals: false,
+        title: {
+            text: 'Profissionais'
+        }
+    },
+    });
+</script>
+{% endblock %}

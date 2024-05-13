@@ -1,0 +1,47 @@
+// Styling for the call to action section
+section.cta {
+    position: relative;
+    min-height: 500px;
+    background-position: center;
+    @include background-cover;
+    .cta-content {
+        color: white;
+        position: relative;
+        z-index: 1;
+        padding-top: 1rem;
+    }
+    @media (max-width: 425px) {
+        min-height: 600px;
+    }
+    @media (min-width: 768px) {
+        min-height: 650px;
+        padding-top: 12rem;
+        background-position: top center;
+    }
+
+}
+.executivo{
+    .cta{
+        padding: 21px 0px;
+        @media (max-width: 425px) {
+            background-image: url('/static/img/launch-xs.png');
+            background-position: top center;
+        }
+        background-image: url('/static/img/launch.png');
+        
+    }
+}
+.profissional{
+    .cta{
+        background-image: url('/static/img/bg-cta-profissional.png');
+        p{
+            color: #005661;
+        }
+        @media (max-width: 425px) {
+            min-height: 489px;
+            padding: 21px 0px;
+            background-image: url('/static/img/bg-cta-profissional-xs.png');
+            background-position:  center;
+        }
+    }
+}

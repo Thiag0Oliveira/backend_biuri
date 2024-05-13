@@ -1,0 +1,16 @@
+﻿.search {
+    padding-left: 0px !important;
+    width: 100%;
+        .material-icons {
+            position: absolute;
+        }
+    
+    input[type="text"] {
+        width: 100%;
+        font-size: 16px;
+        margin-top: .2rem;
+        padding-left: 3rem;
+        border: none;
+        color: #999;
+    }
+}

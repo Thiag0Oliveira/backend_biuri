@@ -1,0 +1,55 @@
+// Styling for the footer
+footer {
+    padding: 50px 0;
+    font-size: 18px;
+    color: #4A4A4A;
+    a{
+        color: #4A4A4A;
+    }
+    .logo{
+        padding-bottom: 35px;
+    }
+    p {
+        margin: 0;
+        &.copyright{
+            padding-bottom: 1rem;
+        }
+    }
+    a {
+        font-weight: 300;
+        color: fade-out(#4A4A4A, .2);
+        &:hover,
+        &:focus,
+        &:active,
+        &.active {
+            text-decoration: none;
+            color: fade-out(#4A4A4A, .0);
+        }
+    }
+    .links-social{
+        position: relative;
+        min-height: 100px;
+        a{
+            display: block;
+            img{
+                margin-right: 5px;
+            }
+        }
+        a:first-child, p:first-child{
+            margin-bottom: 20px;    
+        }
+    }
+    ul {
+        margin-bottom: 0;
+        padding-bottom: 20px;
+        li {
+            padding-right: 30px;
+        }
+    }
+}
+
+.executivo{
+    footer{
+        background: #FBEEDC;
+    }
+}

@@ -1,0 +1,344 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Pagamento Biuri</title>
+    <link href="/static/dashboard/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="/static/dashboard/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Lato:400,300,700);
+        body,html {
+          height:100%;
+          margin:0;
+          font-family:helvetica;
+        }
+
+        .order-title {
+          margin-bottom:0px;
+          margin-top:25px;
+          text-align:center;
+          font-weight:200;
+          font-size:25px;
+        }
+        .container2 {
+          min-height: 100%;
+          -webkit-box-pack:center;
+          -webkit-justify-content:center;
+              -ms-flex-pack:center;
+                  justify-content:center;
+          -webkit-box-align:center;
+          -webkit-align-items:center;
+              -ms-flex-align:center;
+                  align-items:center;
+          display:-webkit-box;
+          display:-webkit-flex;
+          display:-ms-flexbox;
+          display:flex;
+          background:-webkit-linear-gradient(#69B5F0, #ccddf9);
+          background:linear-gradient(#69B5F0,#ccddf9);
+        }
+
+        ul {
+          margin:0;
+          padding:0;
+        }
+        ul li {
+          list-style:none;
+          padding-left:10px;
+          cursor:pointer;
+        }
+        ul li:hover {
+          background:rgba(255,255,255,0.1);
+        }
+
+        .thin {
+          font-weight:400;
+        }
+        .small {
+          font-size:12px;
+          font-size:.8rem;
+        }
+        .half-input-table {
+          border-collapse:collapse;
+          width:100%;
+        }
+        .half-input-table td:first-of-type {
+          border-right:10px solid #ffffff;
+          width:50%;
+        }
+        .window {
+          height:540px;
+          width:800px;
+          background:#fff;
+          display:-webkit-box;
+          display:-webkit-flex;
+          display:-ms-flexbox;
+          display:flex;
+          border-radius:30px;
+          z-index:10;
+        }
+        .order-info {
+          height:100%;
+          width:50%;
+          padding-left:25px;
+          padding-right:25px;
+          box-sizing:border-box;
+          display:-webkit-box;
+          display:-webkit-flex;
+          display:-ms-flexbox;
+          display:flex;
+          -webkit-box-pack:center;
+          -webkit-justify-content:center;
+              -ms-flex-pack:center;
+                  justify-content:center;
+          position:relative;
+        }
+        .price {
+          bottom:0px;
+          position:absolute;
+          right:0px;
+          color:#4488dd;
+        }
+        .order-table td:first-of-type {
+          width:25%;
+        }
+        .order-table {
+            position:relative;
+        }
+        .line {
+          height:1px;
+          width:100%;
+          margin-top:10px;
+          margin-bottom:10px;
+          background:#ddd;
+        }
+        .order-table td:last-of-type {
+          vertical-align:top;
+          padding-left:25px;
+        }
+        .order-info-content {
+          table-layout:fixed;
+
+        }
+
+        .full-width {
+          width:100%;
+        }
+        .pay-btn {
+          border:none;
+          background:#69B5F0;
+          line-height:3em;
+          border-radius:10px;
+          font-size:19px;
+          font-size:1.2rem;
+          color:#fff;
+          cursor:pointer;
+          position:absolute;
+          bottom:25px;
+          width:calc(100% - 50px);
+          -webkit-transition:all .2s ease;
+                  transition:all .2s ease;
+        }
+        .pay-btn:hover {
+          background:#6EBAF5;
+            color:#eee;
+          -webkit-transition:all .2s ease;
+                  transition:all .2s ease;
+        }
+
+        .total {
+          margin-top:25px;
+          font-size:20px;
+          font-size:1.3rem;
+          position:absolute;
+          bottom:30px;
+          right:27px;
+          left:35px;
+        }
+        .dense {
+          line-height:1.2em;
+          font-size:16px;
+          font-size:1rem;
+        }
+        .input-field {
+          background:rgba(200,200,200,0.1);
+          margin-bottom:10px;
+          margin-top:3px;
+          line-height:1.5em;
+          font-size:20px;
+          font-size:1.3rem;
+          border:none;
+          padding:5px 10px 5px 10px;
+          color:#000;
+          box-sizing:border-box;
+          width:100%;
+          margin-left:auto;
+          margin-right:auto;
+        }
+        .credit-info {
+          background:#ffffff;
+          height:100%;
+          width:50%;
+          color:#000;
+          -webkit-box-pack:center;
+          -webkit-justify-content:center;
+              -ms-flex-pack:center;
+                  justify-content:center;
+          font-size:14px;
+          font-size:.9rem;
+          display:-webkit-box;
+          display:-webkit-flex;
+          display:-ms-flexbox;
+          display:flex;
+          box-sizing:border-box;
+          padding-left:25px;
+          padding-right:25px;
+          border-top-left-radius:30px;
+          border-bottom-left-radius:30px;
+          position:relative;
+        }
+        .credit-card-image {
+          display:block;
+          max-height:80px;
+          margin-left:auto;
+          margin-right:auto;
+          margin-top:15px;
+          margin-bottom:35px;
+        }
+        .credit-info-content {
+          margin-top:28px;
+          -webkit-flex-flow:column;
+              -ms-flex-flow:column;
+                  flex-flow:column;
+          display:-webkit-box;
+          display:-webkit-flex;
+          display:-ms-flexbox;
+          display:flex;
+          width:100%;
+          font-size: 14px;
+        }
+        @media (max-width: 600px) {
+          .window {
+            width: 100%;
+            height: 100%;
+            display:block;
+            border-radius:0px;
+          }
+          .order-info {
+            width:100%;
+            height:auto;
+            padding-bottom:100px;
+            border-radius:0px;
+          }
+          .credit-info {
+            width:100%;
+            height:auto;
+            padding-bottom:100px;
+            border-radius:0px;
+          }
+          .pay-btn {
+            border-radius:0px;
+          }
+        }
+    </style>
+
+</head>
+<body>
+    <div class='container2'>
+      <div class='window'>
+            <div class='credit-info'>
+              <div class='credit-info-content'>
+
+                <img src='http://biuri.com.br/static/img/biuri-logo-black.png' height='80' class='credit-card-image' id='credit-card-image'></img>
+                Número do Cartão de Crédito
+                <input class='input-field'></input>
+                Nome Completo
+                <input class='input-field'></input>
+                <table class='half-input-table'>
+                  <tr>
+                    <td>Validade
+                      <input class='input-field'></input>
+                    </td>
+                    <td>CVV
+                      <input class='input-field'></input>
+                    </td>
+                  </tr>
+                </table>
+                <button class='pay-btn'>Confirmar</button>
+
+              </div>
+
+            </div>
+          <div class='order-info'>
+          <div class='order-info-content'>
+            <h2 class="order-title">Resumo do Atendimento</h2>
+              <div class='line'></div>
+            <table class='order-table'>
+              <tbody>
+                <tr>
+                  <td>
+                    <br> <span class='thin'>Cabelo</span>
+                    <br> Corte Feminino<br> <span class='thin small'><br><br></span>
+                  </td>
+
+                </tr>
+                <tr>
+                  <td>
+                    <div class='price'>R$ 50,00</div>
+                  </td>
+                </tr>
+              </tbody>
+
+            </table>
+            <div class='line'></div>
+            <table class='order-table'>
+              <tbody>
+                <tr>
+                  <td>
+                    <br> <span class='thin'>Cabelo</span>
+                    <br> Escova<br> <span class='thin small'> Comprimento: Curto<br><br></span>
+                  </td>
+
+                </tr>
+                <tr>
+                  <td>
+                    <div class='price'>R$ 40,00</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class='line'></div>
+            <table class='order-table'>
+              <tbody>
+                <tr>
+                  <td>
+                    <br> <span class='thin'>Unhas</span>
+                    <br> Manicure Tradicional<br> <span class='thin small'><br><br></span>
+                  </td>
+
+                </tr>
+                <tr>
+                  <td>
+                    <div class='price'>R$ 30,00</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class='line'></div>
+            <div class='total'>
+              <span style='float:left;'>
+                TOTAL
+              </span>
+              <span style='float:right; text-align:right;'>
+                R$ 120,00
+              </span>
+            </div>
+        </div>
+    </div>
+          </div>
+    </div>
+</body>
+</html>

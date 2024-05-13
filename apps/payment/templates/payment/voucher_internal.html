@@ -1,0 +1,51 @@
+<img style="width: 100px; text-align: center;" src="http://www.biuri.com.br/static/img/biuri-logo-black.png"/>
+<table width="100%" style="margin-top:10px" align="center" border="0" bordercolor="green" cellpadding="4">
+  <tr>
+    <td></td>
+      <td align="center"><b>{{voucher.code}}</b></td>
+  </tr>
+  <tr>
+    <td>
+        <p align="center">
+            <b>
+        {% if voucher.service %}
+            Serviço: {{voucher.service}}
+        {% else %}
+            Válido para todos os serviços
+        {% endif %}
+                </b>
+        </p>
+        <p align="center">
+            <b>
+        {% if voucher.validation_type == 'one_use' %}
+            Cupom de uso único
+        {% else %}
+            Cupom de múltiplos usos
+            <p align="center">{{voucher.quantity}} Disponíveis</p>
+        {% endif %}
+                </b>
+        </p>
+    </td>
+    <td>
+    <p align="center"><pdf:barcode value="{{voucher.code}}" />
+</p></td>
+  </tr>
+    <tr>
+    <td>
+        <p align="center"> Válido de {{voucher.initial_date}}<br>  à {{voucher.final_date}}</p>
+    </td>
+    <td>
+        <p align="center"> Data da compra: {{voucher.created}}</p>
+    </td>
+  </tr>
+    <tr>
+    <td>
+    </td>
+    <td>
+        <p align="center"><b>{% if voucher.discount_type == 'value' %}R$ {{voucher.discount_value}}{% else %} {{voucher.discount}}% de desconto{% endif %}</b></p>
+    </td>
+  </tr>
+</table>
+<p>
+    {% if voucher.observation %}{{voucher.observation}}{% else %}Sem observações{%endif%}
+</p>

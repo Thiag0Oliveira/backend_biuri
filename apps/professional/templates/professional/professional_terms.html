@@ -1,0 +1,282 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+{% load humanize %}
+{% load template_tagcategory %}
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Termos</title>
+</head>
+<style type="text/css">
+
+@frame header_frame {           /* Static Frame */
+           -pdf-frame-content: header_content;
+           left: 30pt; width: 512pt; top: 800pt; height: 40pt;
+       }
+@frame footer_frame {           /* Another static Frame */
+           -pdf-frame-content: footer_content;
+           left: 520pt; width: 512pt; top: 800pt; height: 20pt;
+       }
+@page {
+ background-image: url("static/img/PlanilhaTimbradoFinal.pdf");
+ @frame text {
+       top: 4.5cm;
+       left: 1cm;
+       right: 1cm;
+       bottom: 4cm;
+   }
+}
+table {
+	font-size: 12px;
+	margin-bottom: 12px;
+}
+td.price {
+    text-align: right;
+    font-size: 15px;
+}
+
+td.schedule{
+    text-align: center;
+}
+th {
+    font-size: 12px;
+}
+th.division{
+    font-size: 10px;
+}
+td {
+    text-align: center;
+}
+p {
+    text-align: justify;
+    font-size: 12px;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+div.title {
+    text-align: center;
+    font-weight: 800;
+    font-size: 16px;
+}
+</style>
+<body>
+<div id="header_content">Declaração de Veracidade de informações de {{professional.full_name}}, CPF: {{professional.user.username}}<br> Atualizado: {% now "d/m/Y H:i" %} por {{request.user.get_full_name}}
+</div>
+<div class="title">Declaração de Veracidade de Informações</div>
+<h1> 1. Dados Pessoais</h1>
+<table width="100%" border="1" cellspacing="0" cellpadding="5" >
+    <tr>
+        <th colspan="12">Informações Pessoais</th>
+    </tr>
+    <tr>
+        <th colspan="4">Nome Completo</th>
+        <td colspan="8">{{professional.full_name}}</td>
+    </tr>
+    <tr>
+        <th colspan="2">CPF</th>
+        <td colspan="2">{{professional.user.username}}</td>
+        <th colspan="1">Sexo</th>
+        <td colspan="2">{{professional.gender}}</td>
+        <th colspan="3">Data de Nascimento</th>
+        <td colspan="2">{{professional.birthday|date:"d/m/Y"}}</td>
+    </tr>
+    <tr>
+        <th colspan="2">Telefone</th>
+        <td colspan="3">{{professional.celphone}}</td>
+        <th colspan="2">E-mail</th>
+        <td colspan="5">{{professional.user.email}}</td>
+    </tr>
+    <tr>
+        <th colspan="3">Nome no Aplicativo</th>
+        <td colspan="4">{{professional.user.first_name}} {{professional.user.last_name}}</td>
+        <th colspan="2">Instagram</th>
+        <td colspan="3">{{professional.instagram_username}}</td>
+    </tr>
+</table>
+
+<table width="100%" border="1" cellspacing="0" cellpadding="5" >
+    </tr>
+    <tr>
+        <th colspan="12">Endereço</th>
+    </tr>
+    <tr>
+        <th colspan="4">Logradouro</th>
+        <td colspan="8">{{professional.address.address}}</td>
+    </tr>
+    <tr>
+        <th colspan="2">Número</th>
+        <td colspan="2">{{professional.address.number}}</td>
+        <th colspan="2">Complemento</th>
+        <td colspan="2">{{professional.address.complemento}}</td>
+        <th colspan="1">Bairro</th>
+        <td colspan="3">{{professional.address.neighborhood}}</td>
+    </tr>
+    <tr>
+        <th colspan="2">CEP</th>
+        <td colspan="2">{{professional.address.postal_code}}</td>
+        <th colspan="2">Cidade</th>
+        <td colspan="4">{{professional.address.city}}</td>
+        <th colspan="1">UF</th>
+        <td colspan="1">{{professional.address.state}}</td>
+    </tr>
+</table>
+<table width="100%" border="1" cellspacing="0" cellpadding="5" >
+    <tr>
+        <th colspan="12">Informações Profissionais</th>
+    </tr>
+    <tr>
+        <th colspan="3">Descrição</th>
+        <td colspan="9">{{professional.description}}</td>
+    </tr>
+    <tr>
+        <th colspan="4">Sexo para Atendimento</th>
+        <td colspan="2">{{professional.gender_attendance|gender_attendance}}</td>
+        <th colspan="2">Especialidade</th>
+        <td colspan="4">{{professional.category}}</td>
+    </tr>
+    <tr>
+        <th colspan="4">Percentual de Recebimento</th>
+        <td colspan="2">{{professional.attendance_percent}} %</td>
+        <th colspan="4">Periodicidade de Recebimento</th>
+        <td colspan="2">{{professional.payment_frequency}} dias</td>
+    </tr>
+</table>
+<table width="100%" border="1" cellspacing="0" cellpadding="5" >
+    <tr>
+        <th colspan="12">Informações Bancárias</th>
+    </tr>
+    <tr>
+        <th colspan="2">Banco</th>
+        <td colspan="4">{{professional.bank_account.bank}}</td>
+        <th colspan="3">Tipo de Conta</th>
+        <td colspan="3">{{professional.bank_account.account_type}}</td>
+    </tr>
+    <tr><th colspan="2">Agência</th>
+        <td colspan="2">{{professional.bank_account.get_formated_agency}}</td>
+        <th colspan="2">Operação</th>
+        <td colspan="2">{{professional.bank_account.operation_code}}</td>
+        <th colspan="2">Conta</th>
+        <td colspan="2">{{professional.bank_account.get_formated_account_number}}</td>
+    </tr>
+</table>
+{% if professional.executive %}
+<table width="100%" border="1" cellspacing="0" cellpadding="5" >
+    <tr>
+        <th colspan="12">Informações do Executivo</th>
+    </tr>
+    <tr>
+        <th colspan="4">Nome Completo</th>
+        <td colspan="8">{{professional.executive.user.first_name}} {{professional.executive.user.last_name}}</td>
+    </tr>
+    <tr>
+        <th colspan="2">Telefone</th>
+        <td colspan="3">{{professional.executive.cellphone}}</td>
+        <th colspan="2">E-mail</th>
+        <td colspan="5">{{professional.executive.user.email}}</td>
+    </tr>
+</table>
+{% endif %}
+<pdf:nextpage />
+<h1> 2. Tabela de Preços</h1>
+<table width="100%" border="1" cellspacing="0" cellpadding="5" repeat="2">
+    <tr>
+        <th width="60%" rowspan="2">Serviço</th>
+        <th width="10%" colspan="2">Preço</th>
+        <th width="25%" rowspan="2">Tempo médio</th>
+    </tr>
+    <tr>
+        <th class="division">Aplicativo<br>(Valor Exibido)</th>
+        <th class="division">Profissional<br>(Valor a Receber)</th>
+    </tr>
+    {% for service in service_professional %}
+    <tr>
+        <td>{{service.name}}</td>
+        <td class="price">R$ {{service.minimum_price}}</td>
+        <td class="price">R$ {{service.minimum_received|floatformat:2}}</td>
+        <td class="schedule">{{service.average_time}} minutos</td>
+    </tr>
+    {% endfor %}
+</table>
+<pdf:nextpage/>
+<h1> 3. Horários: </h1>
+<table width="100%" border="1" cellspacing="0" cellpadding="5">
+    <tr>
+        <th>Dia</th>
+        <th>Horário</th>
+    </tr>
+    {% for day in schedule %}
+    <tr>
+        <td class="schedule">{{day.day_of_week|day_of_week}}</td>
+        <td class="schedule">
+            {% if day.provide_all_day %}
+                07:00 ~ 22:00
+            {% else %}
+                {% if day.dawn_morning %}
+            {{day.dawn_morning_range_begin}} ~ {{day.dawn_morning_range_end}} <br>
+                {% endif %}
+                {% if day.afternoon_night %}
+                    {{day.afternoon_night_range_begin}} ~ {{day.afternoon_night_range_end}}
+                {% endif %}
+            {% endif %}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h1> 4. Area de Atendimento: </h1>
+<table width="100%" border="1" cellspacing="0" cellpadding="5">
+    <tr>
+        <th width="20%" >Cidade</th>
+        <th>Bairros</th>
+    </tr>
+    {% for city in citys %}
+    <tr>
+        <td class="schedule">{{city.city.name}}</td>
+        <td class="schedule">
+            {% for neighborhood in city.neighborhoods.all %}
+                {% if forloop.last %}
+                    {{neighborhood.description}}
+                {% else %}
+                    {{neighborhood.description}},
+                {% endif %}
+            {% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<pdf:nextpage/>
+<!--<p style="text-indent: 20px; text-align: justify">Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.</p>-->
+<p>Declaro, para fins de direito, sob as penas da Lei, que as informações prestadas, e documentos que apresento para o registro como profissional cadastrado ao aplicativo BIURI, são verdadeiros e autênticos (fieis à verdade e condizentes com a realidade dos fatos à época).</p>
+
+<p>Fico ciente através desse documento que a falsidade dessa declaração configura crime previsto no Código Penal Brasileiro, passível de apuração na forma da Lei, bem como podendo ser enquadrada como uma conduta de Má Fé, passível de imputação de danos morais e materiais à BIURI.</p>
+
+<p>Declaro, também, que recebi da BIURI 01(um) avental personalizado como brinde publicitário.</p>
+
+<p>Nada mais a declarar, e ciente das responsabilidades pelas informações prestadas e documentos disponibilizados, firmo a presente declaração.</p>
+<table>
+    <tr>
+        <th colspan="2">{{professional.executive.address.city}}, {% now "l, j"%} de {% now "F" %} de {% now "Y" %}</th>
+    </tr>
+    <tr/>
+    <tr/>
+    <tr>
+        <th>________________________________________________</th>
+        <th>________________________________________________</th>
+    </tr>
+    <tr>
+        <td>{{professional.full_name}}</td>
+        <td>{% if professional.executive %}{{professional.executive.user.first_name}} {{professional.executive.user.last_name}} {% endif %}</td>
+    </tr>
+</table>
+<div id="footer_content">Página <pdf:pagenumber/>
+</div>
+{% for document in professional.documentos.all %}
+{% if not ".pdf" in document.document.url %}
+<pdf:nextpage/>
+<h2>Anexo: {{document.document_type}}</h2>
+<img src="{{document.document.url}}" alt="image" width="100%" height="100%" />
+{% endif %}
+{% endfor %}
+
+</body>
+</html>

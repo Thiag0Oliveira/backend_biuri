@@ -1,0 +1,17 @@
+// Styling for the download section
+section.how-it-works {
+    .badges {
+        text-align: center;
+        img {
+            max-width: 260px;
+        }
+        .badge-title {
+            font-size: 22px;
+            padding: 1.2rem 0;
+            margin: 0;
+        }
+        .badge-description{
+            font-size: 18px;
+        }
+    }
+}

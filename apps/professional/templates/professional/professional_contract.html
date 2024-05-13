@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+{% load humanize %}
+{% load template_tagcategory %}
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Termos</title>
+</head>
+<style type="text/css">
+@frame header_frame {           /* Static Frame */
+           -pdf-frame-content: header_content;
+           left: 30pt; width: 512pt; top: 800pt; height: 40pt;
+       }
+@frame footer_frame {           /* Another static Frame */
+           -pdf-frame-content: footer_content;
+           left: 520pt; width: 512pt; top: 800pt; height: 20pt;
+       }
+@page {
+ background-image: url("static/img/PlanilhaTimbradoFinal.pdf");
+ @frame text {
+       top: 5cm;
+       left: 1cm;
+       right: 1cm;
+       bottom: 4cm;
+   }
+}
+table {
+	font-size: 13px;
+	margin-bottom: 15px;
+}
+th {
+    font-size: 12px;
+}
+td, h1 {
+    text-align: center;
+}
+h2 {
+    text-align: justify;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+</style>
+<body>
+<div id="header_content">Contrato de Prestação de Serviços de {{professional.full_name}}, CPF: {{professional.user.username}}<br> Atualizado: {% now "d/m/Y H:i" %} por {{request.user.get_full_name}}
+</div>
+<h1>CONTRATO DE PRESTAÇÃO DE SERVIÇOS - BIURI APP</h1>
+
+{% for clause in clause_list %}
+{{clause.message|safe}}
+{% endfor %}
+<table>
+    <tr>
+        <th colspan="2">{{professional.executive.address.city}}, {% now "l, j"%} de {% now "F" %} de {% now "Y" %}</th>
+    </tr>
+    <tr/>
+    <tr/>
+    <tr>
+        <th>________________________________________________</th>
+        <th>________________________________________________</th>
+    </tr>
+    <tr>
+        <td>{{professional.full_name}}</td>
+        <td>{% if professional.executive %}{{professional.executive.user.first_name}} {{professional.executive.user.last_name}} {% endif %}</td>
+    </tr>
+</table>
+<div id="footer_content">Página <pdf:pagenumber/> de <pdf:pagecount/>
+</div>
+</body>
+</html>

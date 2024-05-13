@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+{% load i18n %}
+{% load account socialaccount %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Logout | BIURI</title>
+    <!-- Favicon-->
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&amp;subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link href="/static/dashboard/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="/static/dashboard/plugins/node-waves/waves.css" rel="stylesheet">
+
+    <!-- Animation Css -->
+    <link href="/static/dashboard/plugins/animate-css/animate.css" rel="stylesheet">
+
+    <!-- Custom Css -->
+    <link href="/static/dashboard/css/style.css" rel="stylesheet">
+<style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255,255,255,.38) solid !important;
+    border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+</style></head>
+<body class="login-page colorblind ls-closed" cz-shortcut-listen="true">
+    <div class="login-box">
+        <div class="logo">
+            <a href="javascript:void(0);">BIURI<b>Admin</b></a>
+            <small>BIURI</small>
+        </div>
+        <div class="card">
+            <div class="body">
+                <p>{% trans 'Are you sure you want to sign out?' %}</p>
+                <form method="post" action="{% url 'account_logout' %}">
+  {% csrf_token %}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+  {% endif %}
+  <button type="submit" class="btn btn-block bg-pink waves-effect">{% trans 'Sign Out' %}</button>
+</form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jquery Core Js -->
+    <script src="/static/dashboard/plugins/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="/static/dashboard/plugins/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="/static/dashboard/plugins/node-waves/waves.js"></script>
+
+    <!-- Validation Plugin Js -->
+    <script src="/static/dashboard/plugins/jquery-validation/jquery.validate.js"></script>
+
+    <!-- Custom Js -->
+    <script src="/static/dashboard/js/admin.js"></script>
+    <script src="/static/dashboard/js/pages/examples/sign-in.js"></script>
+
+
+</body>
+</html>

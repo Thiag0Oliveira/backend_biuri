@@ -1,0 +1,55 @@
+{%if formset.non_form_errors %}
+<p>{{ formset.non_form_errors }}</p>
+{%endif%}
+<table class="table">
+        {{ formset.management_form }}
+            {% for form in formset.forms %}
+                <tr class="formset_row">
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+                    <td>
+                    <h2 class="card-inside-title">Serviço</h2>
+                    {{form.service}}
+                    </td>
+                    <td>
+                    <h2 class="card-inside-title">Quantidade</h2>
+                    {{form.quantity}}
+                    </td>
+                    <td>
+                    <h2 class="card-inside-title">Valor</h2>
+                    {{form.value}}
+                    </td>
+                    <td>
+                    <h2 class="card-inside-title">Observações</h2>
+                    {{form.observation}}
+                    </td>
+                    <td>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ form.initial_date }}
+                            <label class="form-label">{{form.initial_date.label}}</label>
+                            {{ form.initial_date.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ form.final_date }}
+                            <label class="form-label">{{form.final_date.label}}</label>
+                            {{ form.final_date.errors }}
+                        </div>
+                    </div>
+                    </td>
+                    {% if formset.can_delete %}
+                {{ form.DELETE }}
+            {% endif %}
+                </tr>
+            {% endfor %}
+</table>
+<script type="text/javascript">
+    $('.formset_row').formset({
+        addText: 'adicionar',
+        deleteText: 'remover',
+        prefix: '{{ formset.prefix }}'
+    });
+</script>

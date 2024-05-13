@@ -1,0 +1,133 @@
+{% extends 'default/base_dashboard.html' %}
+{% load templatetag_category %}
+{% block css %}
+<link href="/static/dashboard/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- NORMAL Basic Table -->
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        {% if not seller %}
+        <div class="card">
+            <div class="header">
+                <a type="button" class="btn btn-info waves-effect pull-right" href="/dashboard/company/sale/create">
+                    <i class="material-icons">add</i>
+                    <span>Novo Registro</span>
+                </a>
+                <h2>
+                    Vendas
+                    <small></small>
+                </h2>
+            </div>
+            <div class="body table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Status</th>
+                            <th>Telefone</th>
+                            <th>Vendedor</th>
+                            <th>Data</th>
+                            <th>Preço</th>
+                            <th width="200">Observações</th>
+                            <th>Opções</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for object in filter.qs %}
+                            <tr>
+                                <th scope="row"><a target="_blank" href="{% url 'company:company-update' object.company.pk %}">{{object.company.cnpj}} - {{object.company.company_name}}</a></th>
+                                <th scope="row">{{object.status|translate_status}}</th>
+                                <th scope="row">{%if object.company.phone %}{{object.company.phone}}{%else%}-{%endif%}</th>
+                                <th scope="row">{{object.seller.user.first_name}}</th>
+                                <th scope="row">{{object.created|date:"d/m/Y"}}</th>
+                                <th scope="row">R$ {{object.price}}</th>
+                                <th scope="row">{%if object.observation %}{{object.observation}}{%else%}-{%endif%}</th>
+                                <th>
+                                    <a data-toggle="tooltip" title="Editar Venda" data-placement="bottom" href="{% url 'company:sale-update' object.pk %}">
+                                        <i class="material-icons">edit</i>
+                                    </a>
+                                    {%if object.status == 'completed' %}
+                                    <a data-toggle="tooltip" title="Gerar Cupons" data-placement="bottom" target="_blank" href="{% url 'payment:pdf-sale' object.pk %}">
+                                        <i class="material-icons">local_offer</i>
+                                    </a>
+                                    {%endif%}
+                                    {%if object.information_data.pdf %}
+                                    <a data-toggle="tooltip" title="Ver Boleto" target="_blank" data-placement="bottom" href="{{object.information_data.pdf}}">
+                                        <i class="material-icons">payment</i>
+                                    </a>
+                                    {% endif %}
+                                </th>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <a href="professional/service">
+                    <div class="info-box bg-light-green hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">attach_money</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">Preços</div>
+                            <div class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20">0</div>
+                        </div>
+                    </div>
+                        </a>
+                </div>
+    </div>
+    {% endif %}
+</div>
+<!-- #END# NORMAL Basic Table -->
+
+
+
+{% endblock %}
+{% block javascript %}
+
+<script>
+function resetPassword(professional, cellphone1) {
+    let success = false;
+    swal({
+      title: 'Confirme o telefone do profissional',
+      input: 'text',
+      inputValue: cellphone1,
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Confirmar',
+      showLoaderOnConfirm: true,
+      preConfirm: (cellphone) => {
+        return fetch(`/dashboard/professional/${professional}/reset_password?cellphone=${cellphone}`)
+          .then(response => {
+            success = true;
+          })
+          .catch(error => {
+            swal({
+                  title: 'OPS',
+                })
+          })
+    },
+    allowOutsideClick: () => !swal.isLoading()
+    }).then(response => {
+            if (success === true){
+                swal({
+                  type: 'success',
+                  title: 'Senha atualizada!',
+                  text: 'A senha foi enviada para o telefone informado',
+                  timer: 1500,
+                });
+            };
+          })
+    }
+</script>
+<script src="/static/dashboard/plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="/static/dashboard/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="/static/dashboard/js/pages/tables/jquery-datatable.js"></script> {% endblock %}

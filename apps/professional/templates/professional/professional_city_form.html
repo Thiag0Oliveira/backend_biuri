@@ -1,0 +1,34 @@
+{% load template_tagcategory %}
+{%if formset.non_form_errors %}
+<p>{{ formset.non_form_errors }}</p>
+{%endif%}
+<table class="table">
+        {{ formset.management_form }}
+            {% for form in formset.forms %}
+                {{ form.management_form }}
+                <h5>{{form.instance.city.name}}</h5>
+                <tr class="formset_row">
+                    <td style="display: none;">
+                        {{form.instance.pk }}
+                    </td>
+                    {% for hidden in form.hidden_fields %}
+                                    {{ hidden }}
+                    {% endfor %}
+                    <div style="display: None;">
+                    {{form.city}}
+                    </div>
+                    <div class="container">
+                        <li><input type="checkbox" class="select-all" name="{{form.prefix}}-{{form.neighborhoods.name}}" value="" id="{{form.prefix}}-select-all" ><label for="{{form.prefix}}-select-all">Selecionar Todos </label></li>
+                        {{form.neighborhoods}}
+                    </div>
+                </tr>
+            {% endfor %}
+</table>
+<script>
+    $('.select-all').change(function() {
+        var bairros = document.getElementsByName(this.getAttribute("name"));
+        for (var i = 0, n = bairros.length; i < n; i++) {
+            bairros[i].checked = this.checked;
+        }
+    })    
+</script>

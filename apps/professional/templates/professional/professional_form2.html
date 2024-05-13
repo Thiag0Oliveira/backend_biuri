@@ -1,0 +1,252 @@
+{% extends 'default/base_dashboard.html' %}
+{% block css %}
+{% endblock %}
+{% block content %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.2.2/jquery.formset.js"></script>
+<!-- Vertical Layout | With Floating Label -->
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    Cadastro/Edição Profissional
+                    <small>Informações Iniciais</small>
+                </h2>
+                <ul class="header-dropdown m-r--5">
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">more_vert</i>
+                        </a>
+                        <!--<ul class="dropdown-menu pull-right">-->
+                        <!--<li>-->
+                        <!--<a href="javascript:void(0);">Action</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                        <!--<a href="javascript:void(0);">Another action</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                        <!--<a href="javascript:void(0);">Something else here</a>-->
+                        <!--</li>-->
+                        <!--</ul>-->
+                    </li>
+                </ul>
+            </div>
+            <div class="body">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h2 class="card-inside-title">Informações Gerais</h2>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ form.full_name }}
+                            <label class="form-label">{{form.full_name.label}}</label>
+                            {{ form.full_name.errors }}
+                        </div>
+                    </div>
+                    {% for field in user_form %}
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ field }}
+                            <label class="form-label">{{field.label}}</label>
+                            {{ field.errors }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ form.is_saloon }}
+                            <label for="{{ form.is_saloon.id_for_label }}">Empresa/Salão</label>
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <label>{{form.birthday.label}}</label>
+                        <div class="form-line">
+                            {{ form.birthday }}
+                            {{ form.birthday.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <label>{{form.avatar.label}}</label>
+                        <div class="form-line">
+                            {{ form.avatar }}
+                            {{ form.avatar.errors }}
+                        </div>
+                    </div>
+                    <h2 class="card-inside-title">Informações do Profissional</h2>
+                    <div class="form-group form-float form-line">
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <p>{{form.gender.label_tag}}</p>
+                            {{ form.gender }}
+                            {{ form.gender.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <p>{{form.gender_attendance.label_tag}}</p>
+                            {{ form.gender_attendance }}
+                            {{ form.gender_attendance.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ form.description }}
+                            <label class="form-label">{{form.description.label}}</label>
+                            {{ form.description.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ form.instagram_username }}
+                            <label class="form-label">{{form.instagram_username.label}}</label>
+                            {{ form.instagram_username.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ form.observation }}
+                            <label class="form-label">{{form.observation.label}}</label>
+                            {{ form.observation.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ form.professional_enabled_executive }}
+                            <label for="{{ form.professional_enabled_executive.id_for_label }}">Profissional Liberado pelo Executivo</label>
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <p>{{form.status.label_tag}}</p>
+                            {{ form.status }}
+                            {{ form.status.errors }}
+                        </div>
+                    </div>
+                    {% if perms.professional.can_liberate_professional %}
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ form.professional_enabled }}
+                            <label for="{{ form.professional_enabled.id_for_label }}">Profissional Liberado</label>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if perms.professional.can_edit_executive %}
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <p>{{form.executive.label_tag}}</p>
+                            {{ form.executive }}
+                            {{ form.executive.errors }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            {{ form.celphone }}
+                            <label class="form-label">{{form.celphone.label}}</label>
+                            {{ form.celphone.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <p>{{form.attendance_percent.label_tag}}</p>
+                            {{ form.attendance_percent }}
+                            {{ form.attendance_percent.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <p>{{form.attendance_window.label_tag}}</p>
+                            {{ form.attendance_window }}
+                            {{ form.attendance_window.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <p>{{form.payment_frequency.label_tag}}</p>
+                            {{ form.payment_frequency }}
+                            {{ form.payment_frequency.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <p>{{form.category.label_tag}}</p>
+                            {{ form.category }}
+                            {{ form.category.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <p>{{form.categorias.label_tag}}</p>
+                            {{ form.categorias }}
+                            {{ form.categorias.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <p>{{form.days_of_week.label_tag}}</p>
+                            {{ form.days_of_week }}
+                            {{ form.days_of_week.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <p>{{form.badges.label_tag}}</p>
+                            {{ form.badges }}
+                            {{ form.badges.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <p>{{form.cidades.label_tag}}</p>
+                            {{ form.cidades }}
+                            {{ form.cidades.errors }}
+                        </div>
+                    </div>
+                    <h2 class="card-inside-title">Endereço</h2>
+                    {% include 'core/address_form.html' with form=address_form%}
+                    <h2 class="card-inside-title">Conta</h2>
+                    {% include 'payment/bank_account_form.html' with form=bank_account_form%}
+                    {% include 'professional/professionaldocument_formset.html' with formset=professional_document_form%}
+                    <!--<h2 class="card-inside-title">Serviços</h2>-->
+                    <!--{% include 'professional/serviceprofessional_formset.html' with formset=serviceprofessional%}-->
+                    <!--<h2 class="card-inside-title">Cidades</h2>-->
+                    <!--{% include 'professional/citys_formset.html' with formset=cityprofessional%}-->
+                    <input type="submit"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Vertical Layout | With Floating Label -->
+{% endblock %}
+{% block javascript %}
+<script>
+    $("#id_cidades").select2({
+    minimumInputLength: 3,
+    ajax: {
+        url: '/citys',
+        dataType: 'json',
+        type: "GET",
+        data: function (params) {
+          var query = {
+            term: params.term
+          }
+          return query;
+        },
+        processResults: function (data) {
+        return {
+            results: $.map(data.items, function (item) {
+                return {
+                    text: item.name + ' - ' + item.state__uf,
+                    id: item.id,
+                }
+            })
+        };
+    }
+    }
+});
+$("#id_bank_account_form-bank").select2();
+</script>
+{% endblock %}
